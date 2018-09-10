@@ -18,12 +18,19 @@ let botConfig = {
     chain: "/etc/letsencrypt/archive/stage-guildrep.mortalengines.com/chain1.pem",
     pageID: '1913415872266963',
     database: {
-        host: 'vpc-meschatbot-prod.ckvbtxg91kfo.us-west-2.rds.amazonaws.com',
-        user: 'meguildpuser01',
-        database: 'MEGUILDPDB01',
-        password: 'CI9jkucU8J',
-        port: '3306'    
-      }  
+      host: 'prjc-db.cerygvvcpfau.us-east-1.rds.amazonaws.com',
+      user: 'prjc_admin',
+      database: 'meguild',
+      password: '7%C0475Fp}u440X',
+      port: '3306'    
+    }
+    // database: {
+    //     host: 'vpc-meschatbot-prod.ckvbtxg91kfo.us-west-2.rds.amazonaws.com',
+    //     user: 'meguildpuser01',
+    //     database: 'MEGUILDPDB01',
+    //     password: 'CI9jkucU8J',
+    //     port: '3306'    
+    //   }  
 };
 var config = function(){
 
