@@ -1154,9 +1154,9 @@ app.get('/token', (req, res) => {
 });
 
 https.createServer({
-  key: fs.readFileSync(envInfo.privkey),
-  cert: fs.readFileSync(envInfo.cert),
-  ca: fs.readFileSync(envInfo.chain)
+  // key: fs.readFileSync(envInfo.privkey),
+  // cert: fs.readFileSync(envInfo.cert),
+  // ca: fs.readFileSync(envInfo.chain)
 }, app).listen(55555, function () {
   console.log('App is ready on port 55555');
 });
