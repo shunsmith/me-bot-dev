@@ -17,8 +17,8 @@ let envInfo = config.configInfo();
 const express = require('express');
 const request = require('superagent');
 const bodyParser = require('body-parser');
-const https = require('https');
-
+// const https = require('https');
+var http = require('http');
 let FBMessenger = require('fb-messenger');
 let messenger = new FBMessenger(envInfo.pageAccessToken);
 let pageToken = "";
@@ -1153,7 +1153,7 @@ app.get('/token', (req, res) => {
   res.sendStatus(403);
 });
 
-https.createServer({
+http.createServer({
   // key: fs.readFileSync(envInfo.privkey),
   // cert: fs.readFileSync(envInfo.cert),
   // ca: fs.readFileSync(envInfo.chain)
