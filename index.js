@@ -1153,6 +1153,6 @@ app.get('/token', (req, res) => {
   res.sendStatus(403);
 });
 let server  = require('http').createServer(app);
-server.listen(55555, () => {
+server.listen(process.env.PORT || 55555, () => {
   console.log('App is ready on port 55555');
 });
