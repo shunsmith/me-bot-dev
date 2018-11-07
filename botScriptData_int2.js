@@ -33,6 +33,7 @@ let phase2 = {
       nextStatus:'i1_scene2'
     }, 
     i1_scene1_followup: {
+      image: media.wantedhester,
       intro:'Wanted For Crimes Against London. Have you Seen This Woman?  Reply Now ‘YES’ Or ‘NO’',
       yes:'An agent of London will contact you immediately. Stay Calm & Keep Moving. Thank You.',
       no:'If you have any information regarding her identity or whereabouts please inform Guildhall immediately. Stay Calm & Keep Moving. Thank you.',

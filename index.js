@@ -683,6 +683,7 @@ let botHandler = (ID, data, answerPending) => {
     // i1_scene3
     // i1_scene4
     case 'i1_scene1':
+    case 'i1_scene1_followup':
       if (!answerPending) {
         // showTyping(ID, 3500, function () {
           sendImage(ID, phase2.paths[user[ID].status].image, () => {
