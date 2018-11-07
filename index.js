@@ -698,7 +698,7 @@ let botHandler = (ID, data, answerPending) => {
               // user[ID].quizFlag = true;
               // botHandler(ID, {}, false);
               setTimeout(()=>{
-                changeStatus();
+                changeStatus(ID);
               },5000)
             });
           });
@@ -726,12 +726,7 @@ let botHandler = (ID, data, answerPending) => {
           var resp = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes :  phase2.paths[user[ID].status].no;
           showTyping(ID, 5000, function () {
             sendTextMessage(ID, resp, () => {
-              // user[ID].status = phase2.paths[user[ID].status].quizStatus;
-              // user[ID].quizFlag = true;
-              // botHandler(ID, {}, false);
-              // setTimeout(()=>{
-                changeStatus();
-              // },5000)
+                changeStatus(ID);
             });
           });
 
@@ -762,7 +757,7 @@ let botHandler = (ID, data, answerPending) => {
               // user[ID].quizFlag = true;
               // botHandler(ID, {}, false);
               // setTimeout(()=>{
-                changeStatus();
+                changeStatus(ID);
               // },5000)
             });
           });
@@ -790,12 +785,7 @@ let botHandler = (ID, data, answerPending) => {
           var resp = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes :  phase2.paths[user[ID].status].no;
           showTyping(ID, 5000, function () {
             sendTextMessage(ID, resp, () => {
-              // user[ID].status = phase2.paths[user[ID].status].quizStatus;
-              // user[ID].quizFlag = true;
-              // botHandler(ID, {}, false);
-              // setTimeout(()=>{
-                changeStatus();
-              // },5000)
+                changeStatus(ID);
             });
           });
 
