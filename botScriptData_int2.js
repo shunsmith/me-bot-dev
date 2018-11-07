@@ -13,96 +13,51 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 */
 // --------------- Script Data -----------------------
 let media = {
-    toaster: 'https://s3.amazonaws.com/mortalengines/2488_TP2_00126R.jpg',
-    cd: 'https://s3.amazonaws.com/mortalengines/2488_TP2_00126R.jpg',
-    riddle: 'https://s3.amazonaws.com/mortalengines/2488_TP2_00126R.jpg',
-    map: 'https://s3.amazonaws.com/mortalengines/blueprint7.jpg',
+    wantedhester: 'https://s3.amazonaws.com/mortalengines/hester.gif',
+    wantedanna: 'https://s3.amazonaws.com/mortalengines/anna.gif',
+    hester: 'https://s3.amazonaws.com/mortalengines/interaction2/hester-poster.jpg',
+    toaster: 'https://s3.amazonaws.com/mortalengines/interaction2/toaster.jpg',
+    cd: 'https://s3.amazonaws.com/mortalengines/interaction2/cd.jpg',
+    riddle: 'https://s3.amazonaws.com/mortalengines/interaction2/blueprint-riddle.jpg',
+    map: 'https://s3.amazonaws.com/mortalengines/interaction2/lion.jpg',
+    keepcalm: 'https://s3.amazonaws.com/mortalengines/interaction2/keepcalm.jpg'
   };
   
 let phase2 = {
-  scene1: {
-    intro:'Hello, (Username). Your time on London has been productive.\nI’ve spoken to my supervisor Dr. Pomeroy about  getting you an apprenticeship in the Guild of Historians. Isn’t that exciting?',
-    yes:'Excellent.',
-    no:'Nerves of steel. You’ll need them.',
-    nextStatus:'scene2'
-  }, 
-  scene2: {
-    intro:'Before you can earn first badge in the Historians’ Guild, there are a few tests I must administer to verify your qualifications.',
-    intro2:'A good historian is able to quickly identify Ancient Tech.',
-    question:'Are you ready?',
-    yes:'Good. Let’s begin',
-    no:'Contact me when you’re ready.',
-    nextStatus:'scene3',
-    exitStatus:'endPrompt1'
-  },
-  scene3: {
-    intro: 'You joined this city when your traction town was devoured by London. These artifacts were recovered from your former home.',
-    question:'Is this old tech known as a Cassette, or a Seedie?',
-    cassetteResponses: [
-      'cassette',
-      'cassette tape',
-      'tape',
-    ],
-    cdResponses: [
-      'seedie',
-      'cd',
-      'compact disc',
-      'disc'
-    ],
-    btnOptions: [
-      {
-        title: 'Cassette',
-        payload: 'cassette'
-      },
-      {
-        title: 'Seedie',
-        payload: 'seedie'
-      }
-    ],
-    image: media.cd,
-    yes: 'Well done!', // CD response
-    no: 'We have found numerous of these “seedies” over the years. They seem to have been prolific in the time of the Ancients.',
-    nextStatus:'scene4'
-  },
-  scene4: {
-    question:'Here is the second artifact. Would you keep it, or discard it?',
-    btnOptions: [
-      {
-        title: 'Keep',
-        payload: 'keep'
-      },
-      {
-        title: 'Discard',
-        payload: 'discard'
-      }
-    ],
-    image: media.toaster,
-    yes: 'Excellent. This is known as a “toaster” and was commonly used to heat a food called “bread”.', // Keep response
-    yes2:'This would be a most prized addition to our collection.',
-    no: 'Oh no. You’ve failed to ascertain that this as an excellent example of ancient tech that would make a fine addition to our Museum.',
-    nextStatus:'assessMore'
-  },
-  assessMore: {
-    question:'Would you like to assess more items?',
-    yesStatus:'showItems',
-    nextStatus:'scene5'
-  },
-  showItems: {
-
-  },
-  scene5: {
-    intro:'One more test. There is a riddle known to all Historians. You must answer it if you want to join the Guild.',
-    question:'_“King of beasts, London shakes when I speak. From St. Pauls above, all hear my roar; Right down to the Gut beneath my claws.”_\nWhat am I?',
-    followup1:'Type in the answer when you solve it.',
-    hint1:'Need a hint, eh. The answer is an animal historically associated with old London.',
-    hint2:'Need another hint?',
-    image: media.riddle,
-    image2: media.map,
-    
-  },
-  endPrompt1: {
-    response:'You’re ready now. Good, let’s begin.',
-    nextStatus:'scene3'
+  paths:{
+    i1_scene1: {
+      image: media.wantedhester,
+      intro:'Wanted For Crimes Against London. Have you Seen This Woman?  Reply Now ‘YES’ Or ‘NO’',
+      yes:'An agent of London will contact you immediately. Stay Calm & Keep Moving. Thank You.',
+      no:'If you have any information regarding her identity or whereabouts please inform Guildhall immediately. Stay Calm & Keep Moving. Thank you.',
+      nextStatus:'i1_scene2'
+    }, 
+    i1_scene1_followup: {
+      intro:'Wanted For Crimes Against London. Have you Seen This Woman?  Reply Now ‘YES’ Or ‘NO’',
+      yes:'An agent of London will contact you immediately. Stay Calm & Keep Moving. Thank You.',
+      no:'If you have any information regarding her identity or whereabouts please inform Guildhall immediately. Stay Calm & Keep Moving. Thank you.',
+      nextStatus:'i1_scene2'
+    }, 
+    i1_scene2: {
+      intro:'WARNING. UNDECTED SIGNALLL. STAND BYS.SSJOPIELK; LSSSS€8zwmmmaa°√¬åS8ñññØÍ8‘˙È§∫ÆV´m~qˆïK€‹∏q£3777===;;ãù∂S◊N•RÍ∫¿†Å',
+      intro2:'This is Antonia Critt, are you receiving?',
+      yes:'Good. I’ve hacked the city’s feed. The tech is ancient and prone to malfunction.',
+      no:'Please bear with me. This ancient tech that I’ve hijacked is unreliable.',
+      nextStatus:'i1_scene3',
+      exitStatus:'endPrompt1'
+    },
+    i1_scene3: {
+      intro:'Are you, (Username)?',
+      yes:'Perfect, I have important information for you.',
+      no:'I have important information, whomever you are.',
+      nextStatus:'i1_scene4'
+    },
+    i1_scene4: {
+      intro:'That masked woman’s name is Hester Shaw and was ingested by London while on Salzhaken. She’s no criminal. She’s a victim. Her mother was murdered by Thaddeus Valentine.  Do you believe me?',
+      yes:'Then help me find her before the corrupt government agents do. Keep your eyes and ears open. I’ll be in touch again soon.',
+      no:'You will. But, not if the corrupt government agents find her Before we do. Stay alert. I’ll be back in touch soon.',
+      nextStatus:'endInteraction1'
+    }
   }
   };
   

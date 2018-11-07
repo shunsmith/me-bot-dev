@@ -16,12 +16,13 @@ let envInfo = config.configInfo();
 
 const express = require('express');
 const request = require('superagent');
+const request2 = require('request');
+const fs = require('fs');
 const bodyParser = require('body-parser');
-// const https = require('https');
-var http = require('http');
+const https = require('https');
+
 let FBMessenger = require('fb-messenger');
 let messenger = new FBMessenger(envInfo.pageAccessToken);
-let pageToken = "";
 
 /*
   Almost all copy for the bot is pulled from here. Primary exception is for the any of the lines below that have dynamic content being pulled in.
@@ -30,8 +31,16 @@ let botScriptData = require('./botScriptData');
 let botScript = new botScriptData();
 let phase1 = botScript.phase1Script();
 
-const app = express().use(bodyParser.json());
-const fs = require('fs');
+let botScriptData2 = require('./botScriptData_int2');
+let botScript2 = new botScriptData2();
+let phase2 = botScript2.phase2Script();
+
+let phase3 = {};
+
+// let imageLib = require('./imageHandler');
+// let imgHandler = new imageLib();
+
+/* DATABASE INIT */
 let dbHandler = require('./dbHandler');
 let db = new dbHandler();
 
@@ -43,16 +52,15 @@ let answerTally = {
 };
 
 var userID = null,
+  currentPhase = phase1,
   user = {},
   btnFound = false,
   preQuizFlag = false,
   quizFlag = false,
   msgObj = null,
-
-  
-
-  yesResponses = ['👍','👍🏻','👍🏼','👍🏽','👍🏾','👍🏿','sure','yea','yeah','why not','okay','okey doke','yes im doing good','yes definitely','yes i do','yes makes sense','yes i would','yes 100%','affirmative','fine','good','great','okay','ok','true','yea','yeah','all right','allright','alright','aye','beyond a doubt','certainly','definitely','exactly','good enough','gladly','granted','indubitably','just so','most assuredly','naturally','of course','positively','precisely','sure','sure thing','surely','understand','understood','undoubtedly','unquestionably','very well','willingly','without fail','yep','yes','i guess','i suppose','makes sense','cool','seems legit','meh','sweet','got it','i do','i can','i think so','y','I am','You bet','(sounds) fair','correct'],
-  noResponses = ['👎','👎🏻','👎🏼','👎🏽','👎🏾','👎🏿','nah','uh uh','dont think so','no this is the worst','no i want to stay','no i dont','no clue','no thanks','no','nope','nada','declined','not at all','negative','n'];
+  hintTimer = null,
+  yesResponses = ['👍', '👍🏻', '👍🏼', '👍🏽', '👍🏾', '👍🏿', 'sure', 'yea', 'yeah', 'why not', 'okay', 'okey doke', 'yes im doing good', 'yes definitely', 'yes i do', 'yes makes sense', 'yes i would', 'yes 100%', 'affirmative', 'fine', 'good', 'great', 'okay', 'ok', 'true', 'yea', 'yeah', 'all right', 'allright', 'alright', 'aye', 'beyond a doubt', 'certainly', 'definitely', 'exactly', 'good enough', 'gladly', 'granted', 'indubitably', 'just so', 'most assuredly', 'naturally', 'of course', 'positively', 'precisely', 'sure', 'sure thing', 'surely', 'understand', 'understood', 'undoubtedly', 'unquestionably', 'very well', 'willingly', 'without fail', 'yep', 'yes', 'i guess', 'i suppose', 'makes sense', 'cool', 'seems legit', 'meh', 'sweet', 'got it', 'i do', 'i can', 'i think so', 'y', 'i am', 'you bet', 'sounds fair', 'correct'],
+  noResponses = ['👎', '👎🏻', '👎🏼', '👎🏽', '👎🏾', '👎🏿', 'nah', 'uh uh', 'dont think so', 'no this is the worst', 'no i want to stay', 'no i dont', 'no clue', 'no thanks', 'no', 'nope', 'nada', 'declined', 'not at all', 'negative', 'n'];
 
 let setProfileInfo = (ID, obj) => {
   user[ID].userProfile = obj;
@@ -60,8 +68,10 @@ let setProfileInfo = (ID, obj) => {
 let getProfileInfo = (ID, key) => {
   return user[ID].userProfile[key];
 };
-let changeStatus = (ID) => {
-  user[ID].status = phase1.paths[user[ID].status].nextStatus;
+let changeStatus = (ID, newStatus) => {
+  let nxt = typeof newStatus !== 'undefined' ? newStatus : user[ID].currentPhase.paths[user[ID].status].nextStatus;
+
+  user[ID].status = nxt;
 
   let obj = {
     status: user[ID].status
@@ -71,7 +81,48 @@ let changeStatus = (ID) => {
   });
 
 };
+let internalInfo = (ID) => {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth() + 1;
+  var yyyy = today.getFullYear();
+  dd = (dd < 10) ? '0' + dd : dd;
+  mm = (mm < 10) ? '0' + mm : mm;
+  today = mm + '/' + dd + '/' + yyyy;
+  sendTextMessage(ID, 'Bot: Status' + today, () => {
+    db.userFound(ID, {}, (results) => {
+      sendTextMessage(ID, `database query: ${JSON.stringify(results)}`, () => {
+        if (typeof user !== 'undefined') {
+          sendTextMessage(ID, `USER OBJECT ${JSON.stringify(user)}`, () => {
+            // user[ID].status = user[ID].currentStatus;
+          });
+        }
+      });
+    });
+  });
+};
 
+let followupSessionTwo = (ID) => {
+
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth() + 1;
+  var yyyy = today.getFullYear();
+  dd = (dd < 10) ? '0' + dd : dd;
+  mm = (mm < 10) ? '0' + mm : mm;
+  today = mm + '/' + dd + '/' + yyyy;
+  sendTextMessage(ID, 'Bot: Status' + today, () => {
+    db.userFound(ID, {}, (results) => {
+      sendTextMessage(ID, `database query: ${JSON.stringify(results)}`, () => {
+        if (typeof user !== 'undefined') {
+          sendTextMessage(ID, `USER OBJECT ${JSON.stringify(user)}`, () => {
+            // user[ID].status = user[ID].currentStatus;
+          });
+        }
+      });
+    });
+  });
+};
 
 
 // --------------- Helpers -----------------------
@@ -83,15 +134,15 @@ let changeStatus = (ID) => {
  */
 
 let sendTextMessage = (ID, str, callback) => {
-  // console.log('userID',userID);
   callback = typeof callback !== 'undefined' ? callback : null;
-  // messenger.sendTextMessage(ID, `${ID} ${str}`, function (err, body) {
+
   messenger.sendTextMessage(ID, str, function (err, body) {
     if (err) return console.error('error', err);
     if (callback !== null) {
       callback();
     }
   });
+
 };
 /**
  * Send typing dots status to user
@@ -162,7 +213,7 @@ let sendButtonMessage = (ID, str, btnOptions, callback) => {
 };
 /**
  * Default message sent if reponse isn't matched
- * TODO: Expand for more options
+ * 
  */
 let rejectStatus = '';
 let rejectCount = 1;
@@ -170,10 +221,10 @@ let sendRejectionMessage = (ID, YesNoCheck) => {
   YesNoCheck = typeof YesNoCheck !== 'undefined' ? YesNoCheck : false;
   let selected = '';
   let responses = [
-    'I’d wager 5 Quirkes is you rephrase that, I can better understand you.',
+    'I’d wager 5 Quirkes if you rephrase that, I can better understand you.',
     'I hear you. But, I’m not certain what you mean. Yes or no?',
-    'I’m afraid we’ll never fully understand this Ancient technology. Maybe try retyping your response as yes or no?',    
-    'This Ancient Tech can be so problematic. Please try again.',    
+    'I’m afraid we’ll never fully understand this Ancient technology. Maybe try retyping your response as yes or no?',
+    'This Ancient Tech can be so problematic. Please try again.',
     'Hmm. Maybe typing “yes” or “no” can help this ancient tech to function properly.',
     'The Guild of Engineers are still figuring out this Ancient Tech. Maybe answering “yes” or “no” will work better.'
   ];
@@ -193,7 +244,7 @@ let sendRejectionMessage = (ID, YesNoCheck) => {
     user[ID].attempts += 1;
   } else {
     sendTextMessage(ID, 'I thought you’d be more helpful than that.\nMaybe we can try again another time.\nGood bye.');
-    user[ID].status = 'endInteractive1';
+    user[ID].status = 'endInteraction1';
   }
 };
 let resetAttempts = (ID) => {
@@ -205,9 +256,9 @@ let showEmojiResponse = (ID) => {
     sendTextMessage(ID, 'Seems this old tech cannot decipher icons of emotion.', () => {
       showTyping(ID, 1000, function () {
         sendTextMessage(ID, 'Let’s try a simple yes or no.');
-      });  
+      });
     });
-  });  
+  });
 
 };
 
@@ -219,28 +270,249 @@ let showEmojiResponse = (ID) => {
 let initUser = (ID) => {
   user[ID] = {};
   user[ID].ID = ID;
+  user[ID].first_name = 'Citizen';
   user[ID].attempts = 0;
   user[ID].guild = '';
   user[ID].preQuizFlag = true;
   user[ID].quizFlag = false;
 
 };
-let startSession = (ID) => {
-  messenger.getProfile(ID, function (e, b) {
-    if (e) return console.error('error', e);
-    setProfileInfo(ID, b);
-    user[ID].status = 'disclaimer';
 
-    var data = {
-      ID: ID,
-      first_name: b['first_name'],
-      status: user[ID].status
-    };
+// TEST USER IDs
+/* Shun Live 2093294007382064 */
+/* Shun Dev 1673627912714016 */
+/* Andy 1587801794657635 */
+/* Project C Dev 1731193596992122 */
+/* Project C Live 883665018424119 */
+/* Dino 1768664439867579 */
+/* Morgan 1584507178328118 */ 
+/* Matthew 1685460031507283 */
+/* Leigh 1760166547372521 */
 
-    db.addUser(ID, data, () => {
-      botHandler(ID, b, false);
+let adminUsers = [
+  2093294007382064,
+  1673627912714016,
+  1587801794657635,
+  1731193596992122,
+  883665018424119,
+  1768664439867579,
+  1584507178328118,
+  1685460031507283,
+  1760166547372521
+]
+let inTestGroup = (ID) => {
+  let compID = parseInt(ID);
+  return adminUsers.indexOf(compID) > -1;
+  ;
+}
+
+// The lambdaHandler function has a check for specific test users that can run the commands in this function
+let adminCommandsCheck = (userID,userResponse) => {
+  let followupInt = null;
+  let followupTestID = 1673627912714016;
+
+  switch (userResponse) {
+    
+
+    //USED TO RUN A FOLLOW UP MESSAGE TEST TO SPECIFIC USERS
+    case 'followupimagetestdino':
+    followupTestID = 1768664439867579;
+    case 'followupimagetestmatthew':
+    followupTestID = 1685460031507283;
+    case 'followupimagetest':
+    db.sendQuery(userID, "SELECT * FROM guildmembers WHERE fbid = "+followupTestID, (res) => {
+      console.log('followupImageTest',followupTestID);
+      sendImage(followupTestID, 'https://s3.amazonaws.com/mortalengines/Test_gif.gif', () => {
+        sendTextMessage(followupTestID, `Greetings ${res.name}, this is follow up message. The Wingkong is Exchange is ready to dominate.`,()=>{
+          sendTextMessage(userID, `Hello, a message was sent to ${followupTestID}`);
+
+        });
+      }); 
+    });
+      return;
+      break;
+
+    case 'testfollowupphase2':
+      db.sendQuery(userID, "SELECT * FROM guildmembers WHERE can_send_plus_one = 1", (res) => {
+        let canFollowUp = res.filter(dbuser => ((dbuser.fbid == 1760166547372521) ||(dbuser.fbid == 1673627912714016)));
+        // let canFollowUp = res.filter(dbuser => ((dbuser.fbid == 1685460031507283) ||(dbuser.fbid == 1768664439867579) || (dbuser.fbid == 1673627912714016)));
+        console.log('canFollowUp',canFollowUp);
+        followupInt = setInterval(() => {
+          if (canFollowUp.length > 0) {
+            let fUpUser = canFollowUp.pop();
+            let obj = {
+              can_send_plus_one: 0,
+              phase: 2,
+              status: 'i1_scene1_followup'
+            };
+            updateUserInfo(fUpUser.fbid, obj, () => {
+              sendTextMessage(fUpUser.fbid, `Hello, ${fUpUser.name}. Your time on London has been productive. I’ve spoken to my supervisor Dr. Pomeroy about getting you an apprenticeship in the Guild of Historians. Isn’t that exciting?`, () => {
+                console.log('user sent message:', fUpUser);
+                // botHandler(fUpUser.fbid, {}, false);
+              });
+
+            });
+
+          } else {
+            console.log('users follow up complete');
+            clearInterval(followupInt);
+          }
+        }, 10000);
+        // sendTextMessage(userID, `DB ENTRIES ${JSON.stringify(canFollowUp)}`);
+      });
+      return;
+      break;
+
+      // USE THIS COMMAND TO SEND THE FOLLOW UP MESSAGE FOR SECOND INTERACTION. WILL QUERY THE DATABASE, RUN THROUGH ELIGIBLE ACCOUNTS AND SEND FOLLOW UP MESSAGES AT AN INTERVAL OF ONE PER MINUTE. NOTE SENT TO LOG FILE WHEN UPDATES ARE DONE
+    case 'followupphase2':
+      db.sendQuery(userID, "SELECT * FROM guildmembers WHERE can_send_plus_one = 1", (res) => {
+        let canFollowUp = res.filter(dbuser => dbuser.phase == 1);
+        followupInt = setInterval(() => {
+          if (canFollowUp.length > 0) {
+            let fUpUser = canFollowUp.pop();
+            let obj = {
+              can_send_plus_one: 0,
+              phase: 2,
+              status: 'i1_scene1_followup'
+            };
+            updateUserInfo(fUpUser.fbid, obj, () => {
+              sendTextMessage(fUpUser.fbid, phase2.paths.i1_scene1_followup.intro.replace('(Username)', fUpUser.name), () => {
+                console.log('user sent message:', fUpUser);
+              });
+            });
+
+          } else {
+            console.log('users follow up complete');
+            clearInterval(followupInt);
+          }
+        }, 60000);
+      });
+      return;
+      break;
+
+    case 'showdbentries':
+      db.sendQuery(userID, "SELECT * FROM guildmembers WHERE can_send_plus_one = 1", (res) => {
+        let moveCanFollowUp = res.filter(dbuser => dbuser.phase == 1);
+        sendTextMessage(userID, `DB ENTRIES ${JSON.stringify(moveCanFollowUp)}`);
+      });
+      return;
+      break;
+
+    case 'numuserentries':
+      db.sendQuery(userID, "SELECT * FROM guildmembers", (res) => {
+        sendTextMessage(userID, `# DB ENTRIES: ${res.length}`);
+      });
+      return;
+      break;
+    case 'myuserinfo':
+      internalInfo(userID);
+      return;
+      break;
+    case 'startint2':
+      changeStatus(userID, 'i1_scene1');
+      return;
+      break;
+    case 'badgemaker':
+      getBadge(userID);
+      return;
+      break;
+    case 'reset':
+      initUser(userID);
+      startSession(userID);
+      return;
+      break;
+  }
+
+}
+
+
+let getBadge = (ID, callback) => {
+  callback = typeof callback !== 'undefined' ? callback : null;
+
+  let uname = user[ID].userProfile.first_name + ' ' + (user[ID].userProfile.last_name).charAt(0) + '.';
+  let imgurl = 'https://graph.facebook.com/' + ID + '/picture?type=large&access_token=' + envInfo.pageAccessToken;
+
+  let data = {};
+  data.name = uname;
+  data.job = user[ID].guild || 'historians';
+  data.img = imgurl;
+
+
+  let cmURL = 'https://www.mortalengines.com/badgemaker/index.php';
+  // let cmURL = 'http://universal.projectc.net/badgemaker/index.php';
+  let body = JSON.stringify(data);
+  request2.post(
+    cmURL, {
+      form: {
+        body
+      }
+    },
+    function (error, response, body) {
+      if (!error) {
+
+        let rtnData = JSON.parse(body);
+        console.log('image returned', rtnData.image);
+
+        showTyping(ID, 4000, function () {
+          sendImage(ID, rtnData.image, () => {
+            updateUserInfo(ID, {
+              badgeid: rtnData.badgeid
+            }, () => {
+              if (callback !== null) {
+                callback();
+              }
+            });
+          });
+        });
+
+      } else {
+        console.log(error);
+        if (callback !== null) {
+          callback();
+        }
+      }
+    }
+  );
+};
+let getUserInfo = (ID, callback) => {
+  callback = typeof callback !== 'undefined' ? callback : null;
+
+  let url = `https://graph.facebook.com/${ID}?fields=first_name,last_name,profile_pic&access_token=${envInfo.pageAccessToken}`;
+  request.get(url)
+    .end((err, res) => {
+      let userinfo = {
+        first_name: 'Citizen'
+      };
+      if (err) {
+        if (callback !== null) {
+          callback(userinfo);
+        }
+        return console.log(err);
+      }
+      userinfo = JSON.parse(res.text);
+      if (callback !== null) {
+        callback(userinfo);
+      }
+
     });
 
+}
+let startSession = (ID) => {
+  console.log('startSession',ID);
+
+  getUserInfo(ID, (resp) => {
+    let userinfo = resp;
+    setProfileInfo(ID, userinfo);
+    user[ID].status = 'i1_scene1';
+    user[ID].currentPhase = phase2;
+    var data = {
+      ID: ID,
+      first_name: userinfo['first_name'],
+      status: user[ID].status
+    };
+    db.addUser(ID, data, () => {
+      botHandler(ID, userinfo, false);
+    });
   });
 };
 
@@ -261,8 +533,10 @@ let updateUserInfo = (fbID, data, callback) => {
   // badgeid
   // can_send_plus_one
   // last_active_time
-  console.log('updateUserInfo');
-  console.log(data);
+
+  // console.log('updateUserInfo');
+  // console.log(data);
+
   db.updateDBInfo(fbID, data, callback);
 };
 /**
@@ -280,8 +554,6 @@ let simpleYesNo = msgObj => {
   var nlpPos = mood && mood.confidence > 0.5 && (mood.value == 'positive');
   var nlpNeg = mood && mood.confidence > 0.5 && mood.value == 'negative';
   var response = (hasYes && !hasNo) ? 'yes' : (hasNo && !hasYes) ? 'no' : 'unknown';
-  // var response = (hasYes && !hasNo) || nlpPos ? 'yes' : (hasNo && !hasYes) || nlpNeg ? 'no' : 'unknown';
-  // console.log(`simple yes no: hasYes:${hasYes} hasNo:${hasNo} mood${mood} nlpPos${nlpPos} nlpNeg${nlpNeg} `)
 
   return response;
 };
@@ -305,9 +577,6 @@ let checkMood = (entities, mood) => {
       result: null,
       found: false
     };
-  /*
-    OTHER ENTITIES: thanks,bye,datetime,amount_of_money,email,distance,quantity,temperature,location,duration 
-  */
 
   var output = {
       result: null,
@@ -340,6 +609,17 @@ let checkMood = (entities, mood) => {
   return output;
 };
 
+let updateQuizTally = (response) => {
+  // answerTally[response] += 1;
+  if (response.indexOf(',') > -1) {
+    response.split(',').forEach(function (v, i) {
+      answerTally[v] += 1;
+    });
+  } else {
+    answerTally[response] += 1;
+  }
+}
+
 /**
  * Primary handler for bot interaction
  * @param  {} data the message object that is returned from Facebook 
@@ -352,8 +632,8 @@ let botHandler = (ID, data, answerPending) => {
   let dbData = {};
   let callback = null;
 
-  if ((typeof user[ID] == 'undefined') || (user[ID] == {}) ) {
-  // if (!('status' in user[ID])) {
+  if ((typeof user[ID] == 'undefined') || (user[ID] == {})) {
+    // if (!('status' in user[ID])) {
     console.log('no status found');
     initUser(ID);
     db.userFound(ID, {}, (results) => {
@@ -364,336 +644,65 @@ let botHandler = (ID, data, answerPending) => {
 
   }
   switch (user[ID].status) {
-    case 'disclaimer':
+    // case 'disclaimer':
+    //   if (!answerPending) {
+    //     showTyping(ID, 4000, function () {
+    //       sendTextMessage(ID, phase1.paths[user[ID].status].intro, () => {
+    //         showTyping(ID, 2500, function () {
+    //           sendTextMessage(ID, phase1.paths[user[ID].status].question);
+    //         });
+    //       });
+    //     });
+    //   } else {
+    //     if (simpleYesNo(data) == 'yes') {
+    //       showTyping(ID, 1500, function () {
+    //         changeStatus(ID);
+    //       });
+    //       resetAttempts(ID);
+    //     } else if (simpleYesNo(data) == 'no') {
+    //       showTyping(ID, 3000, function () {
+    //         sendTextMessage(ID, phase1.paths[user[ID].status].negative, () => {
+    //           // showTyping(ID, 2000, function () {
+    //           // sendTextMessage(ID, phase1.paths[user[ID].status].negative2, () => {
+    //           user[ID].status = 'end';
+    //           botHandler(ID, {}, false);
+    //           // });
+    //           // });
+    //         });
+    //       });
+    //       resetAttempts(ID);
+    //     } else {
+    //       sendRejectionMessage(ID, true);
+    //     }
+    //   }
+    //   break;
+
+    // i1_scene1
+    // i1_scene1_followup
+    // i1_scene2
+    // i1_scene3
+    // i1_scene4
+    case 'i1_scene1':
       if (!answerPending) {
-        showTyping(ID, 4000, function () {
-          sendTextMessage(ID, phase1.paths[user[ID].status].intro, () => {
-            showTyping(ID, 2500, function () {
-              sendTextMessage(ID, phase1.paths[user[ID].status].question);
-            });
+        // showTyping(ID, 3500, function () {
+          sendImage(ID, phase2.paths[user[ID].status].image, () => {
+            /* */
           });
-        });
-      } else {
-        if (simpleYesNo(data) == 'yes') {
-          showTyping(ID, 1500, function () {
-            changeStatus(ID);
-          });
-          resetAttempts(ID);
-        } else if (simpleYesNo(data) == 'no') {
-          showTyping(ID, 3000, function () {
-            sendTextMessage(ID, phase1.paths[user[ID].status].negative, () => {
-              // showTyping(ID, 2000, function () {
-              // sendTextMessage(ID, phase1.paths[user[ID].status].negative2, () => {
-              user[ID].status = 'end';
-              botHandler(ID, {}, false);
-              // });
-              // });
-            });
-          });
-          resetAttempts(ID);
-        } else {
-          sendRejectionMessage(ID, true);
-        }
-      }
-      break;
-
-    case 'scene1':
-      if (!answerPending) {
-        showTyping(ID, 3500, function () {
-          sendTextMessage(ID, phase1.paths[user[ID].status].intro, () => {
-            showTyping(ID, 4000, function () {
-              if (!user[ID].preQuizFlag) {
-                sendTextMessage(ID, phase1.paths[user[ID].status].guildFound, () => {
-
-                  showTyping(ID, 3000, function () {
-                    sendTextMessage(ID, `Guild of ${user[ID].guild.charAt(0).toUpperCase() + user[ID].guild.slice(1)}.`, () => {
-
-                      user[ID].status = 'quizPrevTaken';
-                      botHandler(ID, {}, false);
-
-                    });
-                  });
-
-                });
-              } else {
-                sendTextMessage(ID, phase1.paths[user[ID].status].question);
-              }
-            });
-          });
-        });
-      } else {
-        if (simpleYesNo(data) == 'yes') {
-          phase1.paths[user[ID].status].nextStatus = phase1.paths[user[ID].status].guildStatus;
-          resetAttempts(ID);
-          changeStatus(ID);
-        } else if (simpleYesNo(data) == 'no') {
-          showTyping(ID, 5000, function () {
-            sendTextMessage(ID, phase1.paths[user[ID].status].negative, () => {
-              user[ID].status = phase1.paths[user[ID].status].quizStatus;
-              user[ID].quizFlag = true;
-              botHandler(ID, {}, false);
-              // changeStatus();
-            });
-          });
-          resetAttempts(ID);
-        } else {
-          sendRejectionMessage(ID, true);
-        }
-      }
-      break;
-
-    case 'quizPrevTaken':
-      if (!answerPending) {
-
-        showTyping(ID, 2500, function () {
-          sendTextMessage(ID, phase1.paths[user[ID].status].question, () => {
-            // changeStatus(ID);
-          });
-        });
-      } else {
-        if (simpleYesNo(data) == 'yes') {
-          showTyping(ID, 3500, function () {
-            sendTextMessage(ID, phase1.paths.quizComplete[user[ID].guild], () => {
-              changeStatus(ID);
-            });
-          });
-          resetAttempts(ID);
-        } else if (simpleYesNo(data) == 'no') {
-          showTyping(ID, 5000, function () {
-            sendTextMessage(ID, phase1.paths[user[ID].status].negative, () => {
-              user[ID].status = 'guildCheck';
-              botHandler(ID, {}, false);
-              // changeStatus();
-              // showTyping(ID, 5000, function () {
-              //   sendTextMessage(ID, phase1.paths[user[ID].status].negative, () => {
-
-              //   });
-
-            });
-          });
-          resetAttempts(ID);
-        } else {
-          sendRejectionMessage(ID, true);
-        }
-      }
-
-      break;
-
-    case 'question1':
-    case 'question2':
-    case 'question3':
-    case 'question4':
-    case 'question5':
-      if (!answerPending) {
-        showTyping(ID, 4000, function () {
-          sendButtonMessage(ID, phase1.paths[user[ID].status].question, phase1.paths[user[ID].status].btnOptions, () => {
-            answerPending = true;
-          });
-        });
-      } else {
-        if (typeof data.message.quick_reply !== 'undefined') {
-          answerTally[data.message.quick_reply.payload] += 1;
-          showTyping(ID, 1200, function () {
-            changeStatus(ID);
-          });
-
-        } else {
-          showTyping(ID, 2500, function () {
-            sendTextMessage(ID, phase1.paths.buttonReceivedTextResponse, () => {
-              botHandler(ID, {}, false);
-            });
-          });
-        }
-      }
-      break;
-
-    case 'guildCheck':
-      if (!answerPending) {
-
-        showTyping(ID, 2500, function () {
-          sendButtonMessage(ID, phase1.paths[user[ID].status].question, phase1.paths[user[ID].status].btnOptions, () => {
-            user[ID].status = 'guildCheck';
-            answerPending = true;
-          });
-        });
-        // showTyping(ID, 2500, function () {
-        //   user[ID].status = 'guildCheck';
-        //   sendTextMessage(ID, phase1.paths[user[ID].status].question);
         // });
       } else {
-
-        if (typeof data.message.quick_reply !== 'undefined') {
-          answerTally[data.message.quick_reply.payload] += 1;
-          user[ID].guild = data.message.quick_reply.payload;
-          // console.log('guild', user[ID].guild);
-          showTyping(ID, 5500, function () {
-            sendTextMessage(ID, phase1.paths.quizComplete[user[ID].guild], () => {
-              showTyping(ID, 2500, function () {
-                if(user[ID].guild == 'historians') {
-                  changeStatus(ID);
-                } else {
-                  sendTextMessage(ID, phase1.paths.quizComplete.followup, () => {
-                    changeStatus(ID);
-                  });
-                }
-              });
+        if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
+          var resp = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes :  phase2.paths[user[ID].status].no;
+          showTyping(ID, 5000, function () {
+            sendTextMessage(ID, resp, () => {
+              // user[ID].status = phase2.paths[user[ID].status].quizStatus;
+              // user[ID].quizFlag = true;
+              // botHandler(ID, {}, false);
+              setTimeout(()=>{
+                changeStatus();
+              },5000)
             });
           });
-        } else {
-          let answerPresent = expectedResponse(
-            data.message.text.toLowerCase(),
-            phase1.paths[user[ID].status].expectedResponses
-          );
-          if (answerPresent) {
-            user[ID].guild = pluralize(data.message.text.toLowerCase());
-            // console.log('guild', user[ID].guild);
-            showTyping(ID, 5500, function () {
-              sendTextMessage(ID, phase1.paths.quizComplete[user[ID].guild], () => {
-                showTyping(ID, 2500, function () {
-                  if(user[ID].guild == 'historians') {
-                    changeStatus(ID);
-                  } else {
-                    sendTextMessage(ID, phase1.paths.quizComplete.followup, () => {
-                      changeStatus(ID);
-                    });
-                  }
-                  });
-                });
-            });
-          } else {
-            showTyping(ID, 2500, function () {
-              sendTextMessage(ID, phase1.paths.buttonReceivedTextResponse, () => {
-                botHandler(ID, {}, false);
-              });
-            });
-          }
-        }
-      }
-      break;
 
-    case 'quizComplete':
-      if (user[ID].quizFlag) {
-        user[ID].guild = Object.keys(answerTally).reduce((a, b) => (answerTally[a] > answerTally[b] ? a : b));
-
-        showTyping(ID, 2500, function () {
-          sendTextMessage(ID, phase1.paths[user[ID].status].intro, () => {
-            user[ID].quizFlag = false;
-            botHandler(ID, {}, false);
-          });
-        });
-      } else if (!answerPending) {
-        showTyping(ID, 3000, function () {
-          sendTextMessage(ID, `Guild of ${user[ID].guild.charAt(0).toUpperCase() + user[ID].guild.slice(1)}.`, () => {
-            showTyping(ID, 2500, function () {
-              sendTextMessage(ID, phase1.paths[user[ID].status][user[ID].guild], () => {
-                if (user[ID].guild == 'historians') {
-                  changeStatus(ID);
-
-                } else {
-                  showTyping(ID, 2500, function () {
-                    sendTextMessage(ID, phase1.paths[user[ID].status].followup, () => {
-                      changeStatus(ID);
-                    });
-                  });
-                }
-              });
-            });
-          });
-        });
-      } else {
-        if (simpleYesNo(data) == 'yes') {
-          showTyping(ID, 5500, function () {
-            sendTextMessage(ID, phase1.paths[user[ID].status][user[ID].guild], () => {
-              changeStatus(ID);
-            });
-          });
-          resetAttempts(ID);
-
-        } else if (simpleYesNo(data) == 'no') {
-          showTyping(ID, 4500, function () {
-            sendTextMessage(ID, phase1.paths[user[ID].status].negative, () => {
-              user[ID].status = phase1.paths[user[ID].status].guildStatus;
-              botHandler(ID, data, false);
-            });
-          });
-          resetAttempts(ID);
-
-        } else {
-          user[ID].status = phase1.paths[user[ID].status].guildStatus;
-          botHandler(ID, data, true);
-        }
-      }
-      break;
-
-    case 'scene2':
-      if (!answerPending) {
-        showTyping(ID, 2200, () => {
-          sendTextMessage(ID, `${user[ID].userProfile.first_name}, are you ready for a brief orientation of the city?`);
-        });
-      } else {
-        if (simpleYesNo(data) == 'yes') {
-          changeStatus(ID);
-          resetAttempts(ID);
-
-        } else if (simpleYesNo(data) == 'no') {
-          user[ID].returnstatus = phase1.paths[user[ID].status].nextStatus;
-          user[ID].status = phase1.paths[user[ID].status].exitStatus;
-          botHandler(ID, {}, false);
-          resetAttempts(ID);
-        } else {
-          sendRejectionMessage(ID);
-        }
-      }
-      break;
-
-    case 'showSchematic':
-
-      break;
-    case 'scene3':
-      if (!answerPending) {
-        //'It took just 60 minutes...'
-        showTyping(ID, 3000, function () {
-          sendTextMessage(ID, phase1.paths[user[ID].status].intro, () => {
-            showTyping(ID, 6000, function () {
-              sendTextMessage(ID, phase1.paths[user[ID].status].intro2, () => {
-                showTyping(ID, 4500, function () {
-                  sendTextMessage(ID, phase1.paths[user[ID].status].intro3, () => {
-                    showTyping(ID, 500, function () {
-                      sendImage(ID, phase1.paths[user[ID].status].image, () => {
-                        showTyping(ID, 3000, function () {
-                          sendTextMessage(ID, phase1.paths[user[ID].status].question);
-                        });
-                      });
-                    });
-                  });
-                });
-              });
-            });
-          });
-        });
-      } else {
-        if (simpleYesNo(data) == 'yes') {
-          showTyping(ID, 2000, function () {
-            sendTextMessage(ID, phase1.paths[user[ID].status].positive, () => {
-              changeStatus(ID);
-            });
-          });
-          resetAttempts(ID);
-
-        } else if (simpleYesNo(data) == 'no') {
-          showTyping(ID, 2000, function () {
-            sendTextMessage(ID, phase1.paths[user[ID].status].negative, () => {
-              showTyping(ID, 500, function () {
-                sendImage(ID, phase1.paths[user[ID].status].image, () => {
-                  showTyping(ID, 3000, function () {
-                    changeStatus(ID);
-                    // sendTextMessage(ID, phase1.paths[user[ID].status].question);
-                  });
-                });
-              });
-
-            });
-          });
           resetAttempts(ID);
         } else {
           sendRejectionMessage(ID, true);
@@ -701,124 +710,95 @@ let botHandler = (ID, data, answerPending) => {
       }
       break;
 
-    case 'scene4':
-      showTyping(ID, 4000, function () {
-        sendTextMessage(ID, phase1.paths[user[ID].status].response, () => {
-          showTyping(ID, 750, function () {
-          sendImage(ID, phase1.paths[user[ID].status].image, () => {
-              setTimeout(function() {
-                showTyping(ID, 7000, function () {
-                  sendTextMessage(ID, phase1.paths[user[ID].status].response2, () => {
-                  showTyping(ID, 750, function () {
-                    sendImage(ID, phase1.paths[user[ID].status].image2, () => {
-                      setTimeout(function() {
-                        showTyping(ID, 6000, function () {
-                          sendTextMessage(ID, phase1.paths[user[ID].status].response3, () => {
-                          showTyping(ID, 500, function () {
-                            sendImage(ID, phase1.paths[user[ID].status].image3, () => {
-                              setTimeout(function() {
-                                  showTyping(ID, 5500, function () {
-                                    sendTextMessage(ID, phase1.paths[user[ID].status].response4, () => {
-                                      changeStatus(ID);
-                                    });
-                                  });
-                              },4000);
-                              });
-                            });
-                          });
-                        });
-                      },3000);
-        
-                      });
-                    });
-                  });
-                });
-              },4000);
+    case 'i1_scene2':
+      if (!answerPending) {
+        showTyping(ID, 3000, function () {
+          sendTextMessage(ID, phase2.paths[user[ID].status].intro, () => {
+            showTyping(ID, 4000, function () {
+              sendTextMessage(ID, phase2.paths[user[ID].status].intro2, () => {
+                /* */
+              });
             });
           });
         });
-      });
+      } else {
+        if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
+          var resp = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes :  phase2.paths[user[ID].status].no;
+          showTyping(ID, 5000, function () {
+            sendTextMessage(ID, resp, () => {
+              // user[ID].status = phase2.paths[user[ID].status].quizStatus;
+              // user[ID].quizFlag = true;
+              // botHandler(ID, {}, false);
+              // setTimeout(()=>{
+                changeStatus();
+              // },5000)
+            });
+          });
+
+          resetAttempts(ID);
+        } else {
+          sendRejectionMessage(ID, true);
+        }
+      }
       break;
 
-    case 'scene5':
+    case 'i1_scene3':
       if (!answerPending) {
-        showTyping(ID, 3000, function () {
-          sendTextMessage(ID, phase1.paths[user[ID].status].question);
+        showTyping(ID, 1500, function () {
+          sendTextMessage(ID, phase2.paths[user[ID].status].intro.replace('(Username)', user[ID].userProfile.first_name), () => {
+            // showTyping(ID, 4000, function () {
+            //   sendTextMessage(ID, phase2.paths[user[ID].status].intro2, () => {
+            //     /* */
+            //   });
+            // });
+          });
         });
       } else {
-        if (simpleYesNo(data) == 'yes') {
+        if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
+          var resp = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes :  phase2.paths[user[ID].status].no;
           showTyping(ID, 4000, function () {
-            sendTextMessage(ID, phase1.paths[user[ID].status].response, () => {
-              showTyping(ID, 3000, function () {
-                sendTextMessage(ID, phase1.paths[user[ID].status].response2, () => {
-                  showTyping(ID, 3000, function () {
-                    sendTextMessage(ID, phase1.paths[user[ID].status].response3, () => {
-                      changeStatus(ID);
-                    });
-                  });
-                });
-              });
+            sendTextMessage(ID, resp, () => {
+              // user[ID].status = phase2.paths[user[ID].status].quizStatus;
+              // user[ID].quizFlag = true;
+              // botHandler(ID, {}, false);
+              // setTimeout(()=>{
+                changeStatus();
+              // },5000)
             });
           });
+
           resetAttempts(ID);
-        } else if (simpleYesNo(data) == 'no') {
-          showTyping(ID, 3500, function () {
-            sendTextMessage(ID, phase1.paths[user[ID].status].negative, () => {
-              showTyping(ID, 4000, function () {
-                sendTextMessage(ID, phase1.paths[user[ID].status].response, () => {
-                  showTyping(ID, 3000, function () {
-                    sendTextMessage(ID, phase1.paths[user[ID].status].response2, () => {
-                      showTyping(ID, 3000, function () {
-                        sendTextMessage(ID, phase1.paths[user[ID].status].response3, () => {
-                          changeStatus(ID);
-                        });
-                      });
-                    });
-                  });
-                });
-              });
-            });
-          });
         } else {
           sendRejectionMessage(ID, true);
         }
       }
       break;
 
-    case 'scene6':
+    case 'i1_scene4':
       if (!answerPending) {
-
-        showTyping(ID, 2200, function () {
-          sendTextMessage(ID, phase1.paths[user[ID].status].question);
+        showTyping(ID, 4500, function () {
+          sendTextMessage(ID, phase2.paths[user[ID].status].intro, () => {
+            // showTyping(ID, 4000, function () {
+            //   sendTextMessage(ID, phase2.paths[user[ID].status].intro2, () => {
+            //     /* */
+            //   });
+            // });
+          });
         });
       } else {
-        if (simpleYesNo(data) == 'yes') {
+        if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
+          var resp = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes :  phase2.paths[user[ID].status].no;
+          showTyping(ID, 5000, function () {
+            sendTextMessage(ID, resp, () => {
+              // user[ID].status = phase2.paths[user[ID].status].quizStatus;
+              // user[ID].quizFlag = true;
+              // botHandler(ID, {}, false);
+              // setTimeout(()=>{
+                changeStatus();
+              // },5000)
+            });
+          });
 
-          showTyping(ID, 2200, function () {
-            sendTextMessage(ID, phase1.paths[user[ID].status].positive, () => {
-              if (user[ID].guild == 'historians') {
-                showTyping(ID, 2200, function () {
-                  sendTextMessage(ID, `${user[ID].userProfile.first_name}, ${phase1.paths[user[ID].status].positive2}`, () => {
-                    changeStatus(ID);
-                  });
-                });
-              } else {
-                changeStatus(ID);
-              }
-            });
-          });
-          resetAttempts(ID);
-        } else if (simpleYesNo(data) == 'no') {
-          showTyping(ID, 2200, function () {
-            sendTextMessage(ID, `${user[ID].userProfile.first_name}, ${phase1.paths[user[ID].status].negative}`, () => {
-              showTyping(ID, 2200, function () {
-                let negResponse = (user[ID].guild == 'historians') ? phase1.paths[user[ID].status].negativeHistorian : phase1.paths[user[ID].status].negative2;
-                sendTextMessage(ID, negResponse, () => {
-                  changeStatus(ID);
-                });
-              });
-            });
-          });
           resetAttempts(ID);
         } else {
           sendRejectionMessage(ID, true);
@@ -826,55 +806,14 @@ let botHandler = (ID, data, answerPending) => {
       }
       break;
 
-    case 'scene7':
-      if (!answerPending) {
-        showTyping(ID, 2200, function () {
-          // 'Would that be better suited'
-          // let uName = getProfileInfo(ID, 'first_name');
-          sendTextMessage(ID, phase1.paths[user[ID].status].question);
-        });
-      } else {
-        if (simpleYesNo(data) == 'yes') {
-          showTyping(ID, 2000, function () {
-            sendTextMessage(
-              ID, `You’ve made the right choice, ${user[ID].userProfile.first_name}. I’ll discuss your situation with our director, Dr. Pomeroy, and get back to you.`,
-              () => {
-                showTyping(ID, 5000, function () {
-                  sendTextMessage(ID, phase1.paths[user[ID].status].positive2, () => {
-                    changeStatus(ID);
-                  });
-                });
-              }
-            );
-          });
-          resetAttempts(ID);
-        } else if (simpleYesNo(data) == 'no') {
-          showTyping(ID, 2000, function () {
-            sendTextMessage(ID, phase1.paths[user[ID].status].negative, () => {
-              showTyping(ID, 5000, function () {
-                sendTextMessage(ID, phase1.paths[user[ID].status].negative2, () => {
-                  changeStatus(ID);
-                });
-              });
-            });
-          });
-          resetAttempts(ID);
-
-        } else {
-          sendRejectionMessage(ID, true);
-        }
-      }
-      break;
 
     case 'endNotHelpful':
       showTyping(ID, 3800, function () {
-        sendTextMessage(ID, phase1.paths[user[ID].status].response, () => {
-          sendTextMessage(ID, phase1.paths[user[ID].status].response2);
+        sendTextMessage(ID, phase2.paths[user[ID].status].response, () => {
+          sendTextMessage(ID, phase2.paths[user[ID].status].response2);
         });
       });
       if (answerPending) {
-        // user[ID].status = 'reengage';
-        // botHandler(ID, {}, false);
         user[ID].status = user[ID].returnstatus;
         botHandler(ID, {}, false);
 
@@ -883,93 +822,34 @@ let botHandler = (ID, data, answerPending) => {
 
     case 'end':
       if (answerPending) {
-        user[ID].status = 'scene1';
+        user[ID].status = 'i1_scene1';
         botHandler(ID, {}, false);
       }
       break;
 
-    case 'reengage':
-      if (!answerPending) {
-        showTyping(ID, 2400, function () {
-          sendTextMessage(ID, 'Welcome back, care to start the process?');
-        });
-      } else {
-        if (simpleYesNo(data) == 'yes') {
-          showTyping(ID, 2400, function () {
-            sendTextMessage(ID, 'Excellent let\'s begin', () => {
-              user[ID].status = 'scene1';
-              botHandler(ID, {}, false);
-            });
-          });
-        } else if (simpleYesNo(data) == 'no') {
-          user[ID].status = 'endNotHelpful';
-          botHandler(ID, {}, false);
-        } else {
-          sendRejectionMessage(ID, true);
-        }
-      }
-      break;
-
-    case 'endInteractive1':
+      case 'endInteraction1nonLinear':
       dbData.can_send_plus_one = 1;
-      // if (parseInt(ID) == 1673627912714016) {
-      //   var today = new Date();
-      //   var dd = today.getDate();
-      //   var mm = today.getMonth() + 1;
-      //   var yyyy = today.getFullYear();
-      //   dd = (dd < 10) ? '0' + dd : dd;
-      //   mm = (mm < 10) ? '0' + mm : mm;
-      //   today = mm + '/' + dd + '/' + yyyy;
-      //   setTimeout(() => {
-      //     sendTextMessage(ID, 'This follow up message was initiated 2 days ago, ' + today);
-      //     console.log('follow up message sent, ' + today);
-      //   }, (2 * 1000 * 60 * 60 * 24));
-      // }
-      // callback = db.endSession();
-      if (answerPending) {
-        showTyping(ID, 2400, function () {
-          sendTextMessage(ID, `Hello again, ${user[ID].userProfile.first_name}. Are you well?`, () => {
-            changeStatus(ID);
-          });
-        });
-      }
 
       break;
 
-      case 'interactionOneInterim':
+    case 'endInteraction1':
+      dbData.can_send_plus_one = 1;
 
-      if (answerPending) {
-        if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
-          let respCheck = (simpleYesNo(data) == 'yes') ? phase1.paths[user[ID].status].positive : phase1.paths[user[ID].status].negative;
-          showTyping(ID, 2400, function () {
-            sendTextMessage(ID, respCheck, () => {
-              showTyping(ID, 2400, function () {
-                sendTextMessage(ID, phase1.paths[user[ID].status].response, () => {
-                  showTyping(ID, 2400, function () {
-                    sendTextMessage(ID, phase1.paths[user[ID].status].response2, () => {
-                      showTyping(ID, 2400, function () {
-                        sendTextMessage(ID, phase1.paths[user[ID].status].response3, () => {
-                          changeStatus(ID);
-                        });
-                      });
-                    });
-                  });
-                });
-              });
-            });
-          });
-          resetAttempts(ID);
-        } else {
-          sendRejectionMessage(ID, true);
-        }
-
-
-
-      }
-
+      // ENABLE FOR LINEAR
+      // setTimeout(() => {
+      //   changeStatus(ID);
+      // }, 5000);
       break;
 
+    case 'endInteraction2':
+      dbData.can_send_plus_one = 1;
+      break;
 
+    case 'NoResponse':
+      /* */
+      break;
+
+      /********************************************** */
 
     case 'status':
       /* */
@@ -1015,7 +895,7 @@ let lambdaHandler = (event, callback) => {
       var pageID = entry.id;
       var timeOfEvent = entry.time;
       entry.messaging.forEach(function (msg) {
-        // console.log(msg);
+
         //Sets userID for session
         userID = userID == null || msg.sender.id ? msg.sender.id : userID;
         userID = parseInt(userID);
@@ -1029,8 +909,8 @@ let lambdaHandler = (event, callback) => {
             user[userID].guild = msg.postback.referral !== undefined ? msg.postback.referral.ref : '???';
             user[userID].preQuizFlag = (user[userID].guild == '???');
             user[userID].quizFlag = false;
-            console.log('get started');
-            console.log(msg.postback);
+            // console.log('get started');
+            // console.log(msg.postback);
             db.userFound(userID, {}, () => {
               startSession(userID);
             });
@@ -1050,53 +930,73 @@ let lambdaHandler = (event, callback) => {
           /* MESSAGE HAS A EMOJI OR STICKER */
           if (typeof msg.message.sticker_id !== 'undefined') {
 
-            if((msg.message.sticker_id == 369239263222822) && (typeof user[userID] == 'undefined')) {
+            if ((msg.message.sticker_id == 369239263222822) && (typeof user[userID] == 'undefined')) {
               initUser(userID);
               db.userFound(userID, {}, () => {
                 startSession(userID);
-              });          
-  
-            // } else if(msg.message.sticker_id == 369239263222822) {
-            //   msg.message.text = 'yes';
-            //   botHandler(userID, msg, true);
+              });
+
+              // } else if(msg.message.sticker_id == 369239263222822) {
+              //   msg.message.text = 'yes';
+              //   botHandler(userID, msg, true);
             } else {
               showEmojiResponse(userID);
 
             }
             return;
           }
-          
           /* MESSAGE RESPONSE FROM USER */
-          let answerPresent = expectedResponse(
-            msg.message.text.toLowerCase(),
-            ['👍🏿','hello','hi','get started','greetings','hello?','start','anyone there?','?']
-          );
+          // let answerPresent = expectedResponse(
+          //   msg.message.text.toLowerCase(),
+          //   ['👍🏿', 'hello', 'hi', 'get started', 'greetings', 'hello?', 'start', 'anyone there?', '?']
+          // );
           // if (answerPresent && (typeof user[userID] == 'undefined')) {
+          //   // if ((typeof user[userID] == 'undefined')) {
+          //   initUser(userID);
+          //   db.userFound(userID, {}, () => {
+          //     startSession(userID);
+          //   });
+          //   return;
+          // }
           if ((typeof user[userID] == 'undefined')) {
-            initUser(userID);
-            db.userFound(userID, {}, () => {
-              startSession(userID);
-            });          
-            // user[userID] = {};
-            // user[userID].ID = userID;
-            // user[userID].attempts = 0;
-            // user[userID].guild = '';
-            // user[userID].preQuizFlag = true;
-            // user[userID].quizFlag = false;
-            // db.userFound(userID, {}, () => {
-            //   startSession(userID);
-            // });
+
+            getUserInfo(userID, (resp) => {
+              initUser(userID);
+              let userinfo = resp;
+              setProfileInfo(userID, userinfo);
+              user[userID].status = 'i1_scene1';
+              user[userID].currentPhase = phase1;
+              var data = {
+                ID: userID,
+                first_name: userinfo['first_name'],
+                status: 'i1_scene1'
+              };
+
+              db.userFound(userID, {}, (userCheck) => {
+                if (typeof userCheck == 'not found') {
+                  db.addUser(userID, data, (resp) => {
+                    console.log('user added to db getting second interaction');
+                    console.log(resp);
+                    botHandler(userID, msg, true);
+                  });
+                } else {
+                  user[userID].status = userCheck.status;
+                  user[userID].currentPhase = (parseInt(userCheck.phase) == 1) ? phase1 : (parseInt(userCheck.phase) == 2) ? phase2 : phase3;
+                  // console.log('user session lost',user[userID].currentPhase)
+                  sendTextMessage(userID, `I apologize for the unpredictability of this old tech. Maybe some day our Guild of Engineers will master it. But, not today.`,()=>{
+                    botHandler(userID, msg, true);
+                  });
+                }
+              });
+            });
             return;
           }
-          if (msg.message.text.toLowerCase() == 'reset') {
-            // user[userID] = {};
-            // user[userID].ID = userID;
-            // user[userID].guild = 'historians';
-            // user[userID].attempts = 0;
-            initUser(userID);
-            startSession(userID);
-            return;
+
+          /* ADMIN COMMANDS */
+          if (inTestGroup(userID)) {
+            adminCommandsCheck(userID,msg.message.text.toLowerCase());
           }
+          /* *************** */
 
           if (msg.message.sticker_id == 'status') {
             user[userID].currentStatus = user[userID].status;
@@ -1104,8 +1004,7 @@ let lambdaHandler = (event, callback) => {
           }
           msgObj = msg;
           botHandler(userID, msg, true);
-          console.log('current Status: ' + user[userID].status);
-          // console.log('message received: ' + JSON.stringify(msg));
+          // console.log('current Status: ' + user[userID].status);
         } else {
           // console.log("DATA RECEIVED: ", event);
         }
@@ -1119,40 +1018,17 @@ let lambdaHandler = (event, callback) => {
 
 
 // ROUTING
+config.initServer(lambdaHandler);
 
-let webhookHandler = (req, res) => {
-  lambdaHandler(req, res);
-}
+// let server  = require('http').createServer(app);
+// server.listen(55555, () => {
+//   console.log('App is ready on port 55555');
+// });
 
-app.route('/webhook')
-  .get((req, res) => {
-    if (req.query['hub.verify_token'] === envInfo.verifyToken) {
-      return res.send(req.query['hub.challenge']);
-    }
-    res.send('Error, wrong validation token');
-  })
-  .post((req, res) => {
-    lambdaHandler(req, res);
-  });
-
-app.post('/token', (req, res) => {
-  // console.log('token post', req.body);
-  if (req.body.verifyToken === envInfo.verifyToken) {
-    pageToken = req.body.token;
-    return res.sendStatus(200);
-  }
-  res.sendStatus(403);
-});
-app.get('/token', (req, res) => {
-  // console.log('token get', req.body);
-  if (req.body.verifyToken === envInfo.verifyToken) {
-    return res.send({
-      token: pageToken
-    });
-  }
-  res.sendStatus(403);
-});
-let server  = require('http').createServer(app);
-server.listen(process.env.PORT || 55555, () => {
-  console.log('App is ready on port 55555');
-});
+// https.createServer({
+//   key: fs.readFileSync(envInfo.privkey),
+//   cert: fs.readFileSync(envInfo.cert),
+//   ca: fs.readFileSync(envInfo.chain)
+// }, app).listen(55555, function () {
+//   console.log('App is ready on port 55555');
+// });

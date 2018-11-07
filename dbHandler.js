@@ -83,7 +83,7 @@ var dbHandler = function(){
 
         connection.query(sql, function (error, results, fields) {
           if (error) throw error;
-          console.log('db updated '+ID);
+          // console.log('db updated '+ID);
           // connection.end();
           if (callback !== null) {
             callback();
@@ -98,12 +98,12 @@ var dbHandler = function(){
         var sql = `INSERT IGNORE INTO guildmembers SET fbid = ${data.ID}, name = "${data.first_name}", phase = 1, status = "${data.status}", can_send_plus_one = false, last_active_time = "${this.formatTimestamp()}";`;
       var query = connection.query(sql, ID, function (error, results, fields) {
         if (error){
-          console.log('record not found');
+          // console.log('record not found');
           // throw error;
         }
-        console.log('user Added');
+        // console.log('user Added');
         if (callback !== null) {
-          callback();
+          callback(results);
         }
       });
   
@@ -116,8 +116,7 @@ var dbHandler = function(){
       var sql = "SELECT * FROM guildmembers WHERE fbid = " + ID;
       var query = connection.query(sql, function (err, result, fields) {
           if (err) throw err;
-          console.log('user found');
-          console.log((result.length > 0) ? result[0] : 'not found');
+
           let results = (result.length > 0) ? result[0] : 'not found';
           if (callback !== null) {
             callback(results);
@@ -138,7 +137,7 @@ var dbHandler = function(){
           // throw error;
         }
         if (callback !== null) {
-          callback();
+          callback(results);
         }
       });
   
@@ -172,7 +171,13 @@ var dbHandler = function(){
           return;
         }
         console.log('Connected to database.');
-        connection.query("CREATE DATABASE IF NOT EXISTS MEGUILDPDB01;", function (err, result) {
+        setInterval(()=>{
+          connection.ping(function (err) {
+            if (err) throw err;
+            //
+          })
+        },60000*9);
+        connection.query("CREATE DATABASE IF NOT EXISTS "+envInfo.database.database+";", function (err, result) {
           if (err) throw err;
           console.log("Database created");
           // connection.end();
@@ -180,6 +185,17 @@ var dbHandler = function(){
             callback();
           }
         });
+      });
+      connection.on('error', function(err) {
+        console.log('db error', err);
+        if(err.code === 'PROTOCOL_CONNECTION_LOST') { 
+          console.log('DB disconnected from timeout');
+        } else if(err.fatal) {
+          console.log('fatal db error');
+        } else {
+          // throw err;
+          console.log('DB error',err);
+        }
       });
     }
   }

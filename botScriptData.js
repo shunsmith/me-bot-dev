@@ -50,7 +50,7 @@ let phase1 = {
           },
           {
             title: 'DONATE IT',
-            payload: 'navigators'
+            payload: 'navigators,historians'
           },
           {
             title: 'DESTROY IT',
@@ -79,7 +79,7 @@ let phase1 = {
           },
           {
             title: 'PROFIT OFF THE WEAK',
-            payload: 'merchants'
+            payload: 'merchants,historians'
           }
         ],
         nextStatus: 'question3'
@@ -96,53 +96,11 @@ let phase1 = {
           },
           {
             title: 'VIDEO GAME',
-            payload: 'engineers'
+            payload: 'engineers,historians'
           },
           {
             title: 'CELLULAR PHONE',
             payload: 'merchants'
-          }
-        ],
-        nextStatus: 'question4'
-      },
-      question4: {
-        question: 'THE “PAST” IS BEST DESCRIBED AS…',
-        btnOptions: [{
-            title: 'A TREASURE',
-            payload: 'merchants'
-          },
-          {
-            title: 'A GHOST',
-            payload: 'engineers'
-          },
-          {
-            title: 'A LESSON',
-            payload: 'historians'
-          },
-          {
-            title: 'A MAP',
-            payload: 'navigators'
-          }
-        ],
-        nextStatus: 'question5'
-      },
-      question5: {
-        question: 'WHICH DO YOU PREFER?',
-        btnOptions: [{
-            title: 'THE MARKET',
-            payload: 'merchants'
-          },
-          {
-            title: 'THE PUB',
-            payload: 'engineers'
-          },
-          {
-            title: 'THE MUSEUM',
-            payload: 'historians'
-          },
-          {
-            title: 'THE OBSERVATORY',
-            payload: 'navigators'
           }
         ],
         nextStatus: 'quizComplete'
@@ -196,7 +154,7 @@ let phase1 = {
         guildStatus: 'guildCheck'
       },
       scene2: {
-        question: 'Are you ready for a brief orientation of the city?',
+        question: '(Username), are you ready for a brief orientation of the city?',
         nextStatus: 'scene3',
         exitStatus: 'endNotHelpful'
       },
@@ -223,14 +181,6 @@ let phase1 = {
         image3: media.thegut,        
         nextStatus: 'scene6'
       },
-      // scene5: {
-      //   question: 'Then, lower still is the Gut, where you are now. Can you see it?',
-      //   negative: 'Look near bottom of the city, above the wheels.',
-      //   response: 'It’s mainly slums, digestion yards, and motors.',
-      //   response2: 'All new citizens begin their time on London here.',
-      //   response3: 'And, can find it difficult to ever untether themselves from it.\nA life of hard labour for others’ prosperity.',
-      //   nextStatus: 'scene6'
-      // },
       scene6: {
         question: `Does that sound fair?`,
         negative: 'I might be able to improve your situation.',
@@ -246,13 +196,15 @@ let phase1 = {
         image: media.london,
         negative: 'Understood. As you’ll be spending most of your time in the stinking sprawl of The Gut, I don’t anticipate our paths to cross again.',
         negative2: 'Best of luck. Antonia.',
-        positive: 'You’ve made the right choice. I’ll discuss your situation with our director, Dr. Pomeroy, and get back to you.',
-        positive2: 'Until then, enjoy all London has to offer.',
-        nextStatus: 'endInteractive1',
+        positive: 'You’ve made the right choice, (Username). Allow me to confirm things with my supervisor. Please stand by for a brief moment.',
+        positiveNonLinear: 'You’ve made the right choice, (Username). I’ll discuss your situation with my supervisor, Dr. Pomeroy.',
+
+        positive2: 'Until then, enjoy all London has to offer. Good bye.',
+        nextStatus: 'endInteraction1',
         reject: 'rejectMessage'
       },
-      endInteractive1: {
-        nextStatus: 'interactionOneInterim'
+      endInteraction1: {
+        nextStatus: 'i2_scene1'
       },
       interactionOneInterim: {
         positive: 'I’m glad to hear that.',
@@ -260,7 +212,7 @@ let phase1 = {
         response: 'I spoke to Director Pomeroy about your situation. As soon as he makes a decision, I’ll contact you.',
         response2: 'For now, I must sign off.  But, please take care of yourself.',
         response3: 'Goodbye, Antonia.',
-        nextStatus: 'endInteractive1'
+        nextStatus: 'endInteraction1'
       },
       endNotHelpful: {
         response: 'I thought you’d be more adventurous than that.\nMaybe we can try again another time?',
