@@ -54,7 +54,7 @@ let phase2 = {
       nextStatus:'i1_scene4'
     },
     i1_scene4: {
-      intro:'The masked woman’s name is Hester Shaw. She was ingested by London while on Salzhaken. She’s no criminal. She’s a victim. Her mother was murdered by Thaddeus Valentine.  Do you believe me?',
+      intro:'The woman in the red mask is Hester Shaw. London ingested her with Salzhaken. She’s not a criminal. She’s a victim. Her mother was murdered by Thaddeus Valentine. Do you believe me?',
       yes:'Then help me find her before the corrupt government agents do. Keep your eyes and ears open. I’ll be in touch again soon.',
       no:'Trust me, you will. But, not if the corrupt government agents find her before we do. Please stay alert. I’ll be back in touch soon.',
       nextStatus:'endInteraction1'
