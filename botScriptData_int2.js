@@ -48,7 +48,7 @@ let phase2 = {
       exitStatus:'endPrompt1'
     },
     i1_scene3: {
-      intro:'Are you, (Username)?',
+      intro:'This is (Username), right?',
       yes:'Perfect, I have important information for you.',
       no:'I have important information, whomever you are.',
       nextStatus:'i1_scene4'
