@@ -42,7 +42,7 @@ let phase2 = {
       intro:'WARNING. UNDECTED SIGNALLL. STAND BYS.SSJOPIELK; LSSSS€8zwmmmaa°√¬åS8ñññØÍ8‘˙È§∫ÆV´m~qˆïK€‹∏q£3777===;;ãù∂S◊N•RÍ∫¿†Å',
       intro2:'This is Antonia Critt, are you receiving?',
       yes:'Good. I’ve hacked the city’s feed. The tech is ancient and prone to malfunction.',
-      no:'Please bear with me. This ancient tech that I’ve hijacked is unreliable.',
+      no:'Please bear with me. This ancient tech I’ve hijacked can be very unreliable.',
       nextStatus:'i1_scene3',
       exitStatus:'endPrompt1'
     },
@@ -53,9 +53,9 @@ let phase2 = {
       nextStatus:'i1_scene4'
     },
     i1_scene4: {
-      intro:'That masked woman’s name is Hester Shaw and was ingested by London while on Salzhaken. She’s no criminal. She’s a victim. Her mother was murdered by Thaddeus Valentine.  Do you believe me?',
+      intro:'The masked woman’s name is Hester Shaw. She was ingested by London while on Salzhaken. She’s no criminal. She’s a victim. Her mother was murdered by Thaddeus Valentine.  Do you believe me?',
       yes:'Then help me find her before the corrupt government agents do. Keep your eyes and ears open. I’ll be in touch again soon.',
-      no:'You will. But, not if the corrupt government agents find her Before we do. Stay alert. I’ll be back in touch soon.',
+      no:'Trust me, you will. But, not if the corrupt government agents find her before we do. Please stay alert. I’ll be back in touch soon.',
       nextStatus:'endInteraction1'
     }
   }
