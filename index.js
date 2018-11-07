@@ -644,38 +644,6 @@ let botHandler = (ID, data, answerPending) => {
 
   }
   switch (user[ID].status) {
-    // case 'disclaimer':
-    //   if (!answerPending) {
-    //     showTyping(ID, 4000, function () {
-    //       sendTextMessage(ID, phase1.paths[user[ID].status].intro, () => {
-    //         showTyping(ID, 2500, function () {
-    //           sendTextMessage(ID, phase1.paths[user[ID].status].question);
-    //         });
-    //       });
-    //     });
-    //   } else {
-    //     if (simpleYesNo(data) == 'yes') {
-    //       showTyping(ID, 1500, function () {
-    //         changeStatus(ID);
-    //       });
-    //       resetAttempts(ID);
-    //     } else if (simpleYesNo(data) == 'no') {
-    //       showTyping(ID, 3000, function () {
-    //         sendTextMessage(ID, phase1.paths[user[ID].status].negative, () => {
-    //           // showTyping(ID, 2000, function () {
-    //           // sendTextMessage(ID, phase1.paths[user[ID].status].negative2, () => {
-    //           user[ID].status = 'end';
-    //           botHandler(ID, {}, false);
-    //           // });
-    //           // });
-    //         });
-    //       });
-    //       resetAttempts(ID);
-    //     } else {
-    //       sendRejectionMessage(ID, true);
-    //     }
-    //   }
-    //   break;
 
     // i1_scene1
     // i1_scene1_followup
@@ -683,6 +651,33 @@ let botHandler = (ID, data, answerPending) => {
     // i1_scene3
     // i1_scene4
     case 'i1_scene1':
+      if (!answerPending) {
+        // showTyping(ID, 3500, function () {
+          sendImage(ID, phase2.paths[user[ID].status].image, () => {
+            /* */
+          });
+        // });
+      } else {
+        if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
+          var resp = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes :  phase2.paths[user[ID].status].no;
+          showTyping(ID, 5000, function () {
+            sendTextMessage(ID, resp, () => {
+              // user[ID].status = phase2.paths[user[ID].status].quizStatus;
+              // user[ID].quizFlag = true;
+              // botHandler(ID, {}, false);
+              setTimeout(()=>{
+                changeStatus(ID);
+              },5000)
+            });
+          });
+
+          resetAttempts(ID);
+        } else {
+          sendRejectionMessage(ID, true);
+        }
+      }
+      break;
+
     case 'i1_scene1_followup':
       if (!answerPending) {
         // showTyping(ID, 3500, function () {
