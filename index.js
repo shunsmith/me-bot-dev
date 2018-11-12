@@ -190,9 +190,23 @@ let sendImage = (ID, img, callback) => {
  */
 let sendVideo = (ID, vid, callback) => {
   callback = typeof callback !== 'undefined' ? callback : null;
-  messenger.sendVideoMessage(ID, vid, function (err, evt) {
+  var messageData = {
+    'attachment': {
+      'type': 'video',
+      'payload': {
+        'url': vid
+      }
+    }
+  };
+
+  messenger.sendMessage(ID, messageData, function (err, evt) {
     if (err) return console.log(err);
-    callback();
+    try {
+      callback();
+    } catch (e) {
+      console.log(e);
+      /* */
+    }
   });
 };
 /**
