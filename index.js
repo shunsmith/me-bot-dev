@@ -796,11 +796,13 @@ let botHandler = (ID, data, answerPending) => {
           var resp2 = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes2 :  phase2.paths[user[ID].status].no2;
           showTyping(ID, 5000, function () {
             sendTextMessage(ID, resp, () => {
-              sendVideo(ID, phase2.paths[user[ID].status].video, () => {
-                showTyping(ID, 5000, function () {
-                  sendTextMessage(ID, resp2, () => {
-                    changeStatus(ID);
-                  });      
+              showTyping(ID, 250, function () {
+                sendVideo(ID, phase2.paths[user[ID].status].video, () => {
+                  showTyping(ID, 5000, function () {
+                    sendTextMessage(ID, resp2, () => {
+                      changeStatus(ID);
+                    });      
+                  });
                 });
               });
             });
