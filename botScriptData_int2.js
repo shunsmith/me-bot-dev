@@ -14,6 +14,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 // --------------- Script Data -----------------------
 let media = {
     wantedhester: 'https://s3.amazonaws.com/mortalengines/hester-wanted.gif',
+    wantedvideo: 'https://s3.amazonaws.com/mortalengines/scavenger.mp4',
     wantedanna: 'https://s3.amazonaws.com/mortalengines/anna-wanted.gif',
     hester: 'https://s3.amazonaws.com/mortalengines/interaction2/hester-poster.jpg',
     toaster: 'https://s3.amazonaws.com/mortalengines/interaction2/toaster.jpg',
@@ -42,21 +43,24 @@ let phase2 = {
     i1_scene2: {
       intro:'WARNING. UNDECTED SIGNALLL. STAND BYS.SSJOPIELK; LSSSS€8zwmmmaa°√¬åS8ñññØÍ8‘˙È§∫ÆV´m~qˆïK€‹∏q£3777===;;ãù∂S◊N•RÍ∫¿†Å',
       intro2:'This is Antonia Critt, are you receiving?',
-      yes:'Good. I’ve hacked the city’s feed. The tech is ancient and prone to malfunction.',
-      no:'Please bear with me. This ancient tech I’ve hijacked can be very unreliable.',
+      yes:'Good. The tech is ancient and prone to malfunction.',
+      no:'Please bear with me.  This ancient tech can be very unreliable.',
       nextStatus:'i1_scene3',
       exitStatus:'endPrompt1'
     },
     i1_scene3: {
-      intro:'This is (Username), right?',
+      intro:'This is (Username), correct?',
       yes:'Perfect, I have important information for you.',
       no:'I have important information, whomever you are.',
       nextStatus:'i1_scene4'
     },
     i1_scene4: {
-      intro:'The woman in the red mask is Hester Shaw. London ingested her with Salzhaken. She’s not a criminal. She’s a victim. Her mother was murdered by Thaddeus Valentine. Do you believe me?',
-      yes:'Then help me find her before the corrupt government agents do. Keep your eyes and ears open. I’ll be in touch again soon.',
-      no:'Trust me, you will. But, not if the corrupt government agents find her before we do. Please stay alert. I’ll be back in touch soon.',
+      intro:'The woman in the red mask is Hester Shaw.  She’s not a criminal. She’s a victim. Her mother was murdered by Thaddeus Valentine. Do you believe me?',
+      yes:'Then help me find her before the government agents do. Here is where she was last seen.',
+      yes2:'Keep your eyes and ears open. I’ll be in touch again soon.',
+      no:'Trust me. You will. But, not if the government agents find her before we do. Here is where she was last seen.',
+      no2:'Stay alert. I’ll be back in touch soon.',
+      video: media.wantedvideo,
       nextStatus:'endInteraction1'
     }
   }

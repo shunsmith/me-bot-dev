@@ -182,6 +182,19 @@ let sendImage = (ID, img, callback) => {
     callback();
   });
 };
+
+/**
+ * Send user an image
+ * @param  {} img absolute URL  to image
+ * @param  {} callback optional callback function
+ */
+let sendVideo = (ID, vid, callback) => {
+  callback = typeof callback !== 'undefined' ? callback : null;
+  messenger.sendImageMessage(ID, vid, function (err, evt) {
+    if (err) return console.log(err);
+    callback();
+  });
+};
 /**
  * Send user a message with buttons as response options
  * @param  {} str String of message/question sent to user
@@ -778,10 +791,18 @@ let botHandler = (ID, data, answerPending) => {
         });
       } else {
         if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
+          
           var resp = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes :  phase2.paths[user[ID].status].no;
+          var resp2 = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes2 :  phase2.paths[user[ID].status].no2;
           showTyping(ID, 5000, function () {
             sendTextMessage(ID, resp, () => {
-                changeStatus(ID);
+              sendVideo(ID, phase2.paths[user[ID].status].video, () => {
+                showTyping(ID, 5000, function () {
+                  sendTextMessage(ID, resp2, () => {
+                    changeStatus(ID);
+                  });      
+                });
+              });
             });
           });
 
