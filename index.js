@@ -811,7 +811,8 @@ let botHandler = (ID, data, answerPending) => {
           showTyping(ID, 5000, function () {
             sendTextMessage(ID, resp, () => {
               showTyping(ID, 250, function () {
-                sendVideo(ID, phase2.paths[user[ID].status].video, () => {
+                sendImage(ID, phase2.paths[user[ID].status].image, () => {
+                // sendVideo(ID, phase2.paths[user[ID].status].video, () => {
                   showTyping(ID, 5000, function () {
                     sendTextMessage(ID, resp2, () => {
                       changeStatus(ID);

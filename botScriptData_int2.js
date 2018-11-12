@@ -15,6 +15,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 let media = {
     wantedhester: 'https://s3.amazonaws.com/mortalengines/hester-wanted.gif',
     wantedvideo: 'https://s3.amazonaws.com/mortalengines/scavenger.mp4',
+    wantedanimation: 'https://s3.amazonaws.com/mortalengines/ME_1.gif',
     wantedanna: 'https://s3.amazonaws.com/mortalengines/anna-wanted.gif',
     hester: 'https://s3.amazonaws.com/mortalengines/interaction2/hester-poster.jpg',
     toaster: 'https://s3.amazonaws.com/mortalengines/interaction2/toaster.jpg',
@@ -60,7 +61,7 @@ let phase2 = {
       yes2:'Keep your eyes and ears open. I’ll be in touch again soon.',
       no:'Trust me. You will. But, not if the government agents find her before we do. Here is where she was last seen.',
       no2:'Stay alert. I’ll be back in touch soon.',
-      video: media.wantedvideo,
+      image: media.wantedanimation,
       nextStatus:'endInteraction1'
     }
   }
