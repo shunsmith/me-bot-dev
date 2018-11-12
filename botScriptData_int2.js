@@ -61,7 +61,7 @@ let phase2 = {
       yes2:'Keep your eyes and ears open. I’ll be in touch again soon.',
       no:'Trust me. You will. But, not if the government agents find her before we do. Here is where she was last seen.',
       no2:'Stay alert. I’ll be back in touch soon.',
-      image: media.wantedvideo,
+      video: media.wantedvideo,
       nextStatus:'endInteraction1'
     }
   }
