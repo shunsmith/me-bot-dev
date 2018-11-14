@@ -31,14 +31,14 @@ let phase2 = {
       image: media.wantedhester,
       intro:'Wanted For Crimes Against London. Have you Seen This Woman?  Reply Now ‘YES’ Or ‘NO’',
       yes:'An agent of London will contact you immediately. Keep Calm & Keep Moving. Thank You.',
-      no:'If you have any information regarding her identity or whereabouts please inform Guildhall immediately. Keep Calm & Keep Moving. Thank you.',
+      no:'An agent of London will be in contact with you to provide more information. Keep Calm & Keep Moving.  Thank you.',
       nextStatus:'i1_scene2'
     }, 
     i1_scene1_followup: {
       image: media.wantedhester,
       intro:'Wanted For Crimes Against London. Have you Seen This Woman?  Reply Now ‘YES’ Or ‘NO’',
       yes:'An agent of London will contact you immediately. Keep Calm & Keep Moving. Thank You.',
-      no:'If you have any information regarding her identity or whereabouts please inform Guildhall immediately. Keep Calm & Keep Moving. Thank you.',
+      no:'An agent of London will be in contact with you to provide more information. Keep Calm & Keep Moving.  Thank you.',
       nextStatus:'i1_scene2'
     }, 
     i1_scene2: {
