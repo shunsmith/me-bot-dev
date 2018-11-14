@@ -737,11 +737,11 @@ let botHandler = (ID, data, answerPending) => {
       if (!answerPending) {
         showTyping(ID, 3000, function () {
           sendTextMessage(ID, phase2.paths[user[ID].status].intro, () => {
-            showTyping(ID, 4000, function () {
-              sendTextMessage(ID, phase2.paths[user[ID].status].intro2, () => {
+            // showTyping(ID, 4000, function () {
+              // sendTextMessage(ID, phase2.paths[user[ID].status].intro2, () => {
                 /* */
-              });
-            });
+              // });
+            // });
           });
         });
       } else {

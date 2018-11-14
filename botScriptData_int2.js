@@ -30,22 +30,21 @@ let phase2 = {
     i1_scene1: {
       image: media.wantedhester,
       intro:'Wanted For Crimes Against London. Have you Seen This Woman?  Reply Now ‘YES’ Or ‘NO’',
-      yes:'An agent of London will contact you immediately. Stay Calm & Keep Moving. Thank You.',
-      no:'If you have any information regarding her identity or whereabouts please inform Guildhall immediately. Stay Calm & Keep Moving. Thank you.',
+      yes:'An agent of London will contact you immediately. Keep Calm & Keep Moving. Thank You.',
+      no:'If you have any information regarding her identity or whereabouts please inform Guildhall immediately. Keep Calm & Keep Moving. Thank you.',
       nextStatus:'i1_scene2'
     }, 
     i1_scene1_followup: {
       image: media.wantedhester,
       intro:'Wanted For Crimes Against London. Have you Seen This Woman?  Reply Now ‘YES’ Or ‘NO’',
-      yes:'An agent of London will contact you immediately. Stay Calm & Keep Moving. Thank You.',
-      no:'If you have any information regarding her identity or whereabouts please inform Guildhall immediately. Stay Calm & Keep Moving. Thank you.',
+      yes:'An agent of London will contact you immediately. Keep Calm & Keep Moving. Thank You.',
+      no:'If you have any information regarding her identity or whereabouts please inform Guildhall immediately. Keep Calm & Keep Moving. Thank you.',
       nextStatus:'i1_scene2'
     }, 
     i1_scene2: {
-      intro:'WARNING. UNDECTED SIGNALLL. STAND BYS.SSJOPIELK; LSSSS€8zwmmmaa°√¬åS8ñññØÍ8‘˙È§∫ÆV´m~qˆïK€‹∏q£3777===;;ãù∂S◊N•RÍ∫¿†Å',
-      intro2:'This is Antonia Critt, are you receiving?',
+      intro:'This is Antonia Critt, are you receiving?',
       yes:'Good. The tech is ancient and prone to malfunction.',
-      no:'Please bear with me.  This ancient tech can be very unreliable.',
+      no:'Please bear with me. This ancient tech can be very unreliable.',
       nextStatus:'i1_scene3',
       exitStatus:'endPrompt1'
     },
