@@ -14,6 +14,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 // --------------- Script Data -----------------------
 let media = {
     wantedhester: 'https://s3.amazonaws.com/mortalengines/hester-wanted.gif',
+    wantedattach: '311709242892023',
     wantedvideo: 'https://s3.amazonaws.com/mortalengines/Me_1.mp4',
     wantedanimation: 'https://s3.amazonaws.com/mortalengines/ME_1.gif',
     wantedanna: 'https://s3.amazonaws.com/mortalengines/anna-wanted.gif',
@@ -29,6 +30,7 @@ let phase2 = {
   paths:{
     i1_scene1: {
       image: media.wantedhester,
+      imageattached: media.wantedattach,
       intro:'Wanted For Crimes Against London. Have you Seen This Woman?  Reply Now ‘YES’ Or ‘NO’',
       yes:'An agent of London will contact you immediately. Keep Calm & Keep Moving. Thank You.',
       no:'An agent of London will be in contact with you to provide more information. Keep Calm & Keep Moving.  Thank you.',
@@ -36,6 +38,7 @@ let phase2 = {
     }, 
     i1_scene1_followup: {
       image: media.wantedhester,
+      imageattached: media.wantedattach,
       intro:'Wanted For Crimes Against London. Have you Seen This Woman?  Reply Now ‘YES’ Or ‘NO’',
       yes:'An agent of London will contact you immediately. Keep Calm & Keep Moving. Thank You.',
       no:'An agent of London will be in contact with you to provide more information. Keep Calm & Keep Moving.  Thank you.',

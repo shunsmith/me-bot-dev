@@ -188,6 +188,33 @@ let sendImage = (ID, img, callback) => {
  * @param  {} img absolute URL  to image
  * @param  {} callback optional callback function
  */
+let sendSavedImage = (ID, img, callback) => {
+  callback = typeof callback !== 'undefined' ? callback : null;
+  var messageData = {
+    'attachment': {
+      'type': 'image',
+      'payload': {
+        'attachment_id': img
+      }
+    }
+  };
+
+  messenger.sendMessage(ID, messageData, function (err, evt) {
+    if (err) return console.log(err);
+    try {
+      callback();
+    } catch (e) {
+      console.log(e);
+      /* */
+    }
+  });
+};
+
+/**
+ * Send user an image
+ * @param  {} img absolute URL  to image
+ * @param  {} callback optional callback function
+ */
 let sendVideo = (ID, vid, callback) => {
   callback = typeof callback !== 'undefined' ? callback : null;
   var messageData = {
@@ -465,8 +492,8 @@ let getBadge = (ID, callback) => {
   data.img = imgurl;
 
 
-  // let cmURL = 'https://www.mortalengines.com/badgemaker/index.php';
-  let cmURL = 'http://universal.projectc.net/badgemaker/index.php';
+  let cmURL = 'https://www.mortalengines.com/badgemaker/index.php';
+  // let cmURL = 'http://universal.projectc.net/badgemaker/index.php';
   let body = JSON.stringify(data);
   request2.post(
     cmURL, {
@@ -680,7 +707,8 @@ let botHandler = (ID, data, answerPending) => {
     case 'i1_scene1':
       if (!answerPending) {
         // showTyping(ID, 3500, function () {
-          sendImage(ID, phase2.paths[user[ID].status].image, () => {
+          sendAtt
+          sendSavedImage(ID, phase2.paths[user[ID].status].imageattached, () => {
             /* */
           });
         // });
@@ -708,7 +736,7 @@ let botHandler = (ID, data, answerPending) => {
     case 'i1_scene1_followup':
       if (!answerPending) {
         // showTyping(ID, 3500, function () {
-          sendImage(ID, phase2.paths[user[ID].status].image, () => {
+          sendSavedImage(ID, phase2.paths[user[ID].status].image, () => {
             /* */
           });
         // });
