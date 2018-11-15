@@ -707,7 +707,6 @@ let botHandler = (ID, data, answerPending) => {
     case 'i1_scene1':
       if (!answerPending) {
         // showTyping(ID, 3500, function () {
-          sendAtt
           sendSavedImage(ID, phase2.paths[user[ID].status].imageattached, () => {
             /* */
           });
