@@ -14,7 +14,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 // --------------- Script Data -----------------------
 let media = {
     wantedhester: 'https://s3.amazonaws.com/mortalengines/hester-wanted.gif',
-    wantedattach: '311709242892023',
+    wantedattach: '212685152963355',
+    wantedattachlive: '311709242892023',
     wantedvideo: 'https://s3.amazonaws.com/mortalengines/Me_1.mp4',
     wantedanimation: 'https://s3.amazonaws.com/mortalengines/ME_1.gif',
     wantedanna: 'https://s3.amazonaws.com/mortalengines/anna-wanted.gif',
