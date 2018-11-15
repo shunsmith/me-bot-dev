@@ -465,8 +465,8 @@ let getBadge = (ID, callback) => {
   data.img = imgurl;
 
 
-  let cmURL = 'https://www.mortalengines.com/badgemaker/index.php';
-  // let cmURL = 'http://universal.projectc.net/badgemaker/index.php';
+  // let cmURL = 'https://www.mortalengines.com/badgemaker/index.php';
+  let cmURL = 'http://universal.projectc.net/badgemaker/index.php';
   let body = JSON.stringify(data);
   request2.post(
     cmURL, {
@@ -983,7 +983,7 @@ let lambdaHandler = (event, callback) => {
           //   return;
           // }
           if ((typeof user[userID] == 'undefined')) {
-
+            console.log('user',userID);
             getUserInfo(userID, (resp) => {
               initUser(userID);
               let userinfo = resp;
@@ -1001,15 +1001,20 @@ let lambdaHandler = (event, callback) => {
                   db.addUser(userID, data, (resp) => {
                     console.log('user added to db getting second interaction');
                     console.log(resp);
+                    user[userID].status = 'i1_scene1';
+                    user[userID].currentPhase = phase2;  
                     botHandler(userID, msg, true);
                   });
                 } else {
-                  user[userID].status = userCheck.status;
-                  user[userID].currentPhase = (parseInt(userCheck.phase) == 1) ? phase1 : (parseInt(userCheck.phase) == 2) ? phase2 : phase3;
+                  user[userID].status = 'i1_scene1';
+                  user[userID].currentPhase = phase2;
+
+                  // user[userID].status = userCheck.status;
+                  // user[userID].currentPhase = (parseInt(userCheck.phase) == 1) ? phase1 : (parseInt(userCheck.phase) == 2) ? phase2 : phase3;
                   // console.log('user session lost',user[userID].currentPhase)
-                  sendTextMessage(userID, `I apologize for the unpredictability of this old tech. Maybe some day our Guild of Engineers will master it. But, not today.`,()=>{
+                  // sendTextMessage(userID, `I apologize for the unpredictability of this old tech. Maybe some day our Guild of Engineers will master it. But, not today.`,()=>{
                     botHandler(userID, msg, true);
-                  });
+                  // });
                 }
               });
             });
