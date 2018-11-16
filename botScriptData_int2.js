@@ -14,17 +14,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 // --------------- Script Data -----------------------
 let media = {
     wantedhester: 'https://s3.amazonaws.com/mortalengines/hester-wanted.gif',
-    wantedattach: '212685152963355',
-    wantedattachlive: '311709242892023',
+    wantedattachdev: '212685152963355',
+    wantedattach: '311709242892023',
     wantedvideo: 'https://s3.amazonaws.com/mortalengines/Me_1.mp4',
-    wantedanimation: 'https://s3.amazonaws.com/mortalengines/ME_1.gif',
-    wantedanna: 'https://s3.amazonaws.com/mortalengines/anna-wanted.gif',
-    hester: 'https://s3.amazonaws.com/mortalengines/interaction2/hester-poster.jpg',
-    toaster: 'https://s3.amazonaws.com/mortalengines/interaction2/toaster.jpg',
-    cd: 'https://s3.amazonaws.com/mortalengines/interaction2/cd.jpg',
-    riddle: 'https://s3.amazonaws.com/mortalengines/interaction2/blueprint-riddle.jpg',
-    map: 'https://s3.amazonaws.com/mortalengines/interaction2/lion.jpg',
-    keepcalm: 'https://s3.amazonaws.com/mortalengines/interaction2/keepcalm.jpg'
+    wantedvideoattach: '703394763366451',
+    wantedvideoattachlive: '2355164654497643'
   };
   
 let phase2 = {
@@ -64,7 +58,7 @@ let phase2 = {
       yes2:'Keep your eyes and ears open. I’ll be in touch again soon.',
       no:'Trust me. You will. But, not if the government agents find her before we do. Here is where she was last seen.',
       no2:'Stay alert. I’ll be back in touch soon.',
-      video: media.wantedvideo,
+      video: media.wantedvideoattach,
       nextStatus:'endInteraction1'
     }
   }

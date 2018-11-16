@@ -215,6 +215,33 @@ let sendSavedImage = (ID, img, callback) => {
  * @param  {} img absolute URL  to image
  * @param  {} callback optional callback function
  */
+let sendSavedVideo = (ID, vid, callback) => {
+  callback = typeof callback !== 'undefined' ? callback : null;
+  var messageData = {
+    'attachment': {
+      'type': 'video',
+      'payload': {
+        'attachment_id': vid
+      }
+    }
+  };
+
+  messenger.sendMessage(ID, messageData, function (err, evt) {
+    if (err) return console.log(err);
+    try {
+      callback();
+    } catch (e) {
+      console.log(e);
+      /* */
+    }
+  });
+};
+
+/**
+ * Send user an image
+ * @param  {} img absolute URL  to image
+ * @param  {} callback optional callback function
+ */
 let sendVideo = (ID, vid, callback) => {
   callback = typeof callback !== 'undefined' ? callback : null;
   var messageData = {
@@ -839,7 +866,7 @@ let botHandler = (ID, data, answerPending) => {
             sendTextMessage(ID, resp, () => {
               showTyping(ID, 250, function () {
                 // sendImage(ID, phase2.paths[user[ID].status].image, () => {
-                sendVideo(ID, phase2.paths[user[ID].status].video, () => {
+                  sendSavedVideo(ID, phase2.paths[user[ID].status].video, () => {
                   showTyping(ID, 5000, function () {
                     sendTextMessage(ID, resp2, () => {
                       changeStatus(ID);
@@ -1035,10 +1062,10 @@ let lambdaHandler = (event, callback) => {
                 } else {
                   user[userID].status = 'i1_scene1';
                   user[userID].currentPhase = phase2;
+                  console.log('user session lost',user[userID].currentPhase)
 
                   // user[userID].status = userCheck.status;
                   // user[userID].currentPhase = (parseInt(userCheck.phase) == 1) ? phase1 : (parseInt(userCheck.phase) == 2) ? phase2 : phase3;
-                  // console.log('user session lost',user[userID].currentPhase)
                   // sendTextMessage(userID, `I apologize for the unpredictability of this old tech. Maybe some day our Guild of Engineers will master it. But, not today.`,()=>{
                     botHandler(userID, msg, true);
                   // });
