@@ -14,11 +14,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 // --------------- Script Data -----------------------
 let media = {
     wantedhester: 'https://s3.amazonaws.com/mortalengines/hester-wanted.gif',
-    wantedattachdev: '212685152963355',
-    wantedattach: '311709242892023',
+    wantedattach: '212685152963355',
+    wantedattachlive: '311709242892023',
     wantedvideo: 'https://s3.amazonaws.com/mortalengines/Me_1.mp4',
     wantedvideoattachlive: '703394763366451',
-    wantedvideoattach: '2355164654497643'
+    wantedvideoattach: '2188708564495752'
   };
   
 let phase2 = {
