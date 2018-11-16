@@ -17,8 +17,8 @@ let media = {
     wantedattachdev: '212685152963355',
     wantedattach: '311709242892023',
     wantedvideo: 'https://s3.amazonaws.com/mortalengines/Me_1.mp4',
-    wantedvideoattach: '703394763366451',
-    wantedvideoattachlive: '2355164654497643'
+    wantedvideoattachlive: '703394763366451',
+    wantedvideoattach: '2355164654497643'
   };
   
 let phase2 = {
