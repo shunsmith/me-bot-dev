@@ -55,7 +55,7 @@ let phase3 = {
       nextStatus:'i3_scene4'
     },
     i3_scene4: {
-      intro:'A predator city devours the innocent. Swallows their homes, confiscates their belongings, and enslaves them. Yet, the Anti-Traction League’s freedom fighters are supposed criminals? Does that sound fair?',
+      intro:'Predator cities devour the innocent. Swallow their homes, confiscate their belongings, and enslave them. Yet, the Anti-Traction League’s freedom fighters are called criminals. Does that sound fair?',
       yes:'Everyone’s free to an opinion. But, look at this.',
       no:'Exactly. Now, look at this.',
       nextStatus:'i3_scene5'
