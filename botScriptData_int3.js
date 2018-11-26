@@ -16,11 +16,8 @@ let media = {
     wantedanna: 'https://s3.amazonaws.com/mortalengines/hester-wanted.gif',
     wantedattach: '1107544716063862',
     wantedattachlive: '208750936692275',
-    mapattach: '1397217713747844',
-    mapattachlive: '930085277188831',
-    wantedvideo: 'https://s3.amazonaws.com/mortalengines/Me_1.mp4',
-    wantedvideoattachlive: '703394763366451',
-    wantedvideoattach: '2188708564495752'
+    mapattach: '353539382122465',
+    mapattachlive: '490700908109737'
   };
   
 let phase3 = {
