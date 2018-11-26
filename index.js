@@ -995,7 +995,7 @@ let botHandler = (ID, data, answerPending) => {
               sendTextMessage(ID, phase3.paths[user[ID].status].intro, () => {
                 showTyping(ID, 4000, function () {
                   sendTextMessage(ID, phase3.paths[user[ID].status].intro2, () => {
-                    changeStatus(ID);
+                    // changeStatus(ID);
                   });
                 });
               });
