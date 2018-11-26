@@ -75,23 +75,23 @@ let phase3 = {
   }
   };
   
-  var botScriptDataInteractionTwo = function(){
+  var botScriptDataInteractionThree = function(){
 
-    function botScriptDataInteractionTwo() {
-      _classCallCheck(this, botScriptDataInteractionTwo);
+    function botScriptDataInteractionThree() {
+      _classCallCheck(this, botScriptDataInteractionThree);
     }
-    _createClass(botScriptDataInteractionTwo, [
+    _createClass(botScriptDataInteractionThree, [
        {
-        key: 'phase2Script',
-        value: function phase2Script() {
-          return phase2;
+        key: 'phase3Script',
+        value: function phase3Script() {
+          return phase3;
         }
       },
   ]);
   
-    return botScriptDataInteractionTwo;
+    return botScriptDataInteractionThree;
   
   }();
   
-  exports.default = botScriptDataInteractionTwo;
+  exports.default = botScriptDataInteractionThree;
   module.exports = exports['default'];
