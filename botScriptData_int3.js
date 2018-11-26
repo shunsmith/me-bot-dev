@@ -53,8 +53,8 @@ let phase3 = {
     },
     i3_scene4: {
       intro:'Predator cities devour the innocent. Swallow their homes, confiscate their belongings, and enslave them. Yet, the Anti-Traction League’s freedom fighters are called criminals. Does that sound fair?',
-      yes:'Everyone’s free to their opinion. But, look at the path of destruction London has laid across Old Europe.',
-      no:'Exactly. Just look at the path of destruction London has laid across Old Europe.',
+      yes:'Everyone’s free to their opinion. But, you can’t deny London has laid waste to almost our entire continent.',
+      no:'Exactly. London has laid waste to almost our entire continent.',
       nextStatus:'i3_scene5'
     },
     i3_scene5: {
