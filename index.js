@@ -35,7 +35,10 @@ let botScriptData2 = require('./botScriptData_int2');
 let botScript2 = new botScriptData2();
 let phase2 = botScript2.phase2Script();
 
-let phase3 = {};
+let botScriptData3 = require('./botScriptData_int3');
+let botScript3 = new botScriptData3();
+let phase3 = botScript3.phase3Script();
+
 
 // let imageLib = require('./imageHandler');
 // let imgHandler = new imageLib();
@@ -457,7 +460,8 @@ let adminCommandsCheck = (userID,userResponse) => {
               status: 'i1_scene1_followup'
             };
             updateUserInfo(fUpUser.fbid, obj, () => {
-              sendTextMessage(fUpUser.fbid, phase2.paths.i1_scene1_followup.intro.replace('(Username)', fUpUser.name), () => {
+              sendSavedImage(fUpUser.fbid, phase2.paths.i1_scene1_followup.imageattached, () => {
+                /* */
                 console.log('user sent message:', fUpUser);
               });
             });
@@ -475,6 +479,16 @@ let adminCommandsCheck = (userID,userResponse) => {
       db.sendQuery(userID, "SELECT * FROM guildmembers WHERE can_send_plus_one = 1", (res) => {
         let moveCanFollowUp = res.filter(dbuser => dbuser.phase == 1);
         sendTextMessage(userID, `DB ENTRIES ${JSON.stringify(moveCanFollowUp)}`);
+      });
+      return;
+      break;
+
+    case 'showdbcount':
+      db.sendQuery(userID, "SELECT * FROM guildmembers WHERE phase = 3", (res) => {
+        let moveCanFollowUp = res.filter(dbuser => dbuser.phase == 1);
+        sendTextMessage(userID, `DB ENTRIES ${JSON.stringify(res.length)}`);
+        console.log('users available');
+        console.log(res);
       });
       return;
       break;
@@ -726,11 +740,6 @@ let botHandler = (ID, data, answerPending) => {
   }
   switch (user[ID].status) {
 
-    // i1_scene1
-    // i1_scene1_followup
-    // i1_scene2
-    // i1_scene3
-    // i1_scene4
     case 'i1_scene1':
       if (!answerPending) {
         // showTyping(ID, 3500, function () {
@@ -912,16 +921,124 @@ let botHandler = (ID, data, answerPending) => {
 
     case 'endInteraction1':
       dbData.can_send_plus_one = 1;
+      dbData.phase = 3;
 
       // ENABLE FOR LINEAR
-      // setTimeout(() => {
-      //   changeStatus(ID);
-      // }, 5000);
+      setTimeout(() => {
+        user[ID].status = 'i3_scene1';
+        user[ID].currentPhase = phase3;
+        botHandler(ID, {}, false);
+      }, 5000);
+
       break;
 
-    case 'endInteraction2':
-      dbData.can_send_plus_one = 1;
+
+      case 'i3_scene1':
+      dbData.can_send_plus_one = 0;
+      if (!answerPending) {
+        // showTyping(ID, 3500, function () {
+          sendSavedImage(ID, phase3.paths[user[ID].status].imageattached, () => {
+            /* */
+          });
+        // });
+      } else {
+        if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
+          // var resp = (simpleYesNo(data) == 'yes') ? phase3.paths[user[ID].status].yes :  phase3.paths[user[ID].status].no;
+          // showTyping(ID, 5000, function () {
+          //   sendTextMessage(ID, resp, () => {
+
+          //     setTimeout(()=>{
+          //       changeStatus(ID);
+          //     },5000)
+          //   });
+          // });
+          changeStatus(ID);
+          resetAttempts(ID);
+        } else {
+          sendRejectionMessage(ID, true);
+        }
+      }
       break;
+
+
+      case 'i3_scene2':
+      case 'i3_scene3':
+      case 'i3_scene4':
+      if (!answerPending) {
+        showTyping(ID, 1500, function () {
+          var resp = (phase3.paths[user[ID].status].intro.indexOf('(Username)') > -1) ? phase3.paths[user[ID].status].intro.replace('(Username)', user[ID].userProfile.first_name) : phase3.paths[user[ID].status].intro;
+          sendTextMessage(ID, resp, () => {
+            /* */
+          });
+        });
+      } else {
+        if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
+          var resp = (simpleYesNo(data) == 'yes') ? phase3.paths[user[ID].status].yes :  phase3.paths[user[ID].status].no;
+          showTyping(ID, 4000, function () {
+            sendTextMessage(ID, resp, () => {
+                changeStatus(ID);
+            });
+          });
+
+          resetAttempts(ID);
+        } else {
+          sendRejectionMessage(ID, true);
+        }
+      }
+      break;
+
+      case 'i3_scene5':
+      if (!answerPending) {
+        showTyping(ID, 600, function () {
+          sendSavedImage(ID, phase3.paths[user[ID].status].imageattached, () => {
+            showTyping(ID, 4000, function () {
+              sendTextMessage(ID, phase3.paths[user[ID].status].intro, () => {
+                showTyping(ID, 4000, function () {
+                  sendTextMessage(ID, phase3.paths[user[ID].status].intro2, () => {
+                    changeStatus(ID);
+                  });
+                });
+              });
+            });
+          });
+        });
+      } else {
+        if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
+          var resp = (simpleYesNo(data) == 'yes') ? phase3.paths[user[ID].status].yes :  phase3.paths[user[ID].status].no;
+          showTyping(ID, 4000, function () {
+            sendTextMessage(ID, resp, () => {
+                changeStatus(ID);
+            });
+          });
+          resetAttempts(ID);
+        } else {
+          sendRejectionMessage(ID, true);
+        }
+      }
+      break;
+
+      case 'i3_scene6':
+        showTyping(ID, 600, function () {
+          sendTextMessage(ID, phase3.paths[user[ID].status].intro, () => {
+            changeStatus(ID);
+          });
+        });
+      break;
+
+
+
+    case 'endInteraction2':
+    dbData.can_send_plus_one = 1;
+    dbData.phase = 4;
+
+    // ENABLE FOR LINEAR
+    // setTimeout(() => {
+    //   user[ID].status = 'i3_scene1';
+    //   user[ID].currentPhase = phase3;
+  
+    //     botHandler(ID, {}, false);
+    // }, 5000);
+    break;
 
     case 'NoResponse':
       /* */
