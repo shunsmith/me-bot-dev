@@ -42,7 +42,7 @@ let phase3 = {
       nextStatus:'i3_scene2'
     }, 
     i3_scene2: {
-      intro:'This is Antonia Critt, (Username), are you receiving?',
+      intro:'Are you there, (Username)? It’s Antonia.',
       yes:'Great, glad you are still with us.',
       no:'Amusing, glad you are still with us.',
       nextStatus:'i3_scene3',
@@ -56,8 +56,8 @@ let phase3 = {
     },
     i3_scene4: {
       intro:'Predator cities devour the innocent. Swallow their homes, confiscate their belongings, and enslave them. Yet, the Anti-Traction League’s freedom fighters are called criminals. Does that sound fair?',
-      yes:'Everyone’s free to an opinion. But, look at this.',
-      no:'Exactly. Now, look at this.',
+      yes:'Everyone’s free to their opinion. But, look at the path of destruction London has laid across Old Europe.',
+      no:'Exactly. Just look at the path of destruction London has laid across Old Europe.',
       nextStatus:'i3_scene5'
     },
     i3_scene5: {
