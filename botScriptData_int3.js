@@ -62,7 +62,7 @@ let phase3 = {
     },
     i3_scene5: {
       imageattached: media.mapattach,
-      intro:'Resources are running out. Those condemned to survive down in the slums vastly outnumber the ruling class above them. A day of reckoning is coming and Thaddeus Valentine knows it.',
+      intro:'Resources are scarce. Those condemned to survive down in the city’s slums vastly outnumber the ruling class. A day of reckoning is near. And, Thaddeus Valentine knows it.',
       intro2:'That’s why he is hunting Hester and Fang. Understand?',
       yes:'Good. We really need your help. But, this channel is not secure.',
       no:'Please consider what I’ve said. We need your help.',
