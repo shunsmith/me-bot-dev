@@ -475,16 +475,45 @@ let adminCommandsCheck = (userID,userResponse) => {
       return;
       break;
 
-    case 'showdbentries':
+    case 'followupphase3':
       db.sendQuery(userID, "SELECT * FROM guildmembers WHERE can_send_plus_one = 1", (res) => {
-        let moveCanFollowUp = res.filter(dbuser => dbuser.phase == 1);
-        sendTextMessage(userID, `DB ENTRIES ${JSON.stringify(moveCanFollowUp)}`);
+        let canFollowUp = res.filter(dbuser => dbuser.phase == 3);
+        followupInt = setInterval(() => {
+          if (canFollowUp.length > 0) {
+            let fUpUser = canFollowUp.pop();
+            let obj = {
+              can_send_plus_one: 0,
+              phase: 3,
+              status: 'i3_scene1_followup'
+            };
+            updateUserInfo(fUpUser.fbid, obj, () => {
+              sendSavedImage(fUpUser.fbid, phase3.paths.i3_scene1_followup.imageattached, () => {
+                /* */
+                console.log('user sent message:', fUpUser);
+              });
+            });
+
+          } else {
+            console.log('users follow up complete');
+            clearInterval(followupInt);
+          }
+        }, 60000);
       });
       return;
       break;
 
     case 'showdbcount':
       db.sendQuery(userID, "SELECT * FROM guildmembers WHERE phase = 3", (res) => {
+        let moveCanFollowUp = res.filter(dbuser => dbuser.phase == 1);
+        sendTextMessage(userID, `DB ENTRIES ${JSON.stringify(res.length)}`);
+        console.log('users available');
+        console.log(res);
+      });
+      return;
+      break;
+
+    case 'showdbcount2':
+      db.sendQuery(userID, "SELECT * FROM guildmembers WHERE phase = 4", (res) => {
         let moveCanFollowUp = res.filter(dbuser => dbuser.phase == 1);
         sendTextMessage(userID, `DB ENTRIES ${JSON.stringify(res.length)}`);
         console.log('users available');
@@ -928,12 +957,39 @@ let botHandler = (ID, data, answerPending) => {
         user[ID].status = 'i3_scene1';
         user[ID].currentPhase = phase3;
         botHandler(ID, {}, false);
-      }, 5000);
+      }, 15000);
 
       break;
 
 
       case 'i3_scene1':
+      dbData.can_send_plus_one = 0;
+      if (!answerPending) {
+        showTyping(ID, 1500, function () {
+          sendSavedImage(ID, phase3.paths[user[ID].status].imageattached, () => {
+            /* */
+          });
+        });
+      } else {
+        if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
+          // var resp = (simpleYesNo(data) == 'yes') ? phase3.paths[user[ID].status].yes :  phase3.paths[user[ID].status].no;
+          // showTyping(ID, 5000, function () {
+          //   sendTextMessage(ID, resp, () => {
+
+          //     setTimeout(()=>{
+          //       changeStatus(ID);
+          //     },5000)
+          //   });
+          // });
+          changeStatus(ID);
+          resetAttempts(ID);
+        } else {
+          sendRejectionMessage(ID, true);
+        }
+      }
+      break;
+
+      case 'i3_scene1_followup':
       dbData.can_send_plus_one = 0;
       if (!answerPending) {
         // showTyping(ID, 3500, function () {
