@@ -44,7 +44,7 @@ let phase3 = {
     i3_scene2: {
       intro:'This is Antonia Critt, (Username), are you receiving?',
       yes:'Great, glad you are still with us.',
-      no:'Very funny, glad you are still with us.',
+      no:'Amusing, glad you are still with us.',
       nextStatus:'i3_scene3',
       exitStatus:'endPrompt1'
     },
