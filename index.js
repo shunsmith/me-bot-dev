@@ -554,7 +554,8 @@ let getBadge = (ID, callback) => {
   callback = typeof callback !== 'undefined' ? callback : null;
 
   let uname = user[ID].userProfile.first_name + ' ' + (user[ID].userProfile.last_name).charAt(0) + '.';
-  let imgurl = 'https://graph.facebook.com/' + ID + '/picture?type=large&access_token=' + envInfo.pageAccessToken;
+  // let imgurl = 'https://graph.facebook.com/' + ID + '/picture?type=large&access_token=' + envInfo.pageAccessToken;
+  let imgurl = 'https://graph.facebook.com/' + ID + '/picture?width=623&height=583&access_token=' + envInfo.pageAccessToken;
 
   let data = {};
   data.name = uname;
@@ -1234,8 +1235,9 @@ let lambdaHandler = (event, callback) => {
                     botHandler(userID, msg, true);
                   });
                 } else {
-                  user[userID].status = 'i1_scene1';
-                  user[userID].currentPhase = phase2;
+
+                  user[userID].status = ((typeof userCheck.status !== 'undefined') && userCheck.status !== 'endInteraction1') ? userCheck.status : 'i3_scene1_followup';
+                  user[userID].currentPhase = (parseInt(userCheck.phase) == 3) ? phase3 : phase2;
                   console.log('user session lost',user[userID].currentPhase)
 
                   // user[userID].status = userCheck.status;
