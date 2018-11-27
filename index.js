@@ -562,8 +562,8 @@ let getBadge = (ID, callback) => {
   data.img = imgurl;
 
 
-  let cmURL = 'https://www.mortalengines.com/badgemaker/index.php';
-  // let cmURL = 'http://universal.projectc.net/badgemaker/index.php';
+  // let cmURL = 'https://www.mortalengines.com/badgemaker/index.php';
+  let cmURL = 'http://universal.projectc.net/badgemaker/index.php';
   let body = JSON.stringify(data);
   request2.post(
     cmURL, {
