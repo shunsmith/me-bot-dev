@@ -958,7 +958,7 @@ let botHandler = (ID, data, answerPending) => {
         user[ID].status = 'i3_scene1';
         user[ID].currentPhase = phase3;
         botHandler(ID, {}, false);
-      }, 3*60*1000);
+      }, 45*1000);
       // }, 3*60*60*1000);
 
       break;
