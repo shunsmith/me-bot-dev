@@ -950,16 +950,19 @@ let botHandler = (ID, data, answerPending) => {
       break;
 
     case 'endInteraction1':
-      dbData.can_send_plus_one = 1;
-      dbData.phase = 3;
+      if (!answerPending) {
+        dbData.can_send_plus_one = 1;
+        dbData.phase = 3;
+  
+        // ENABLE FOR LINEAR
+        setTimeout(() => {
+          user[ID].status = 'i3_scene1';
+          user[ID].currentPhase = phase3;
+          botHandler(ID, {}, false);
+        }, 45*1000);
+        // }, 3*60*60*1000);
+      }
 
-      // ENABLE FOR LINEAR
-      setTimeout(() => {
-        user[ID].status = 'i3_scene1';
-        user[ID].currentPhase = phase3;
-        botHandler(ID, {}, false);
-      }, 45*1000);
-      // }, 3*60*60*1000);
 
       break;
 
@@ -1211,8 +1214,8 @@ let lambdaHandler = (event, callback) => {
           //   });
           //   return;
           // }
+          console.log('user',userID);
           if ((typeof user[userID] == 'undefined')) {
-            console.log('user',userID);
             getUserInfo(userID, (resp) => {
               initUser(userID);
               let userinfo = resp;
