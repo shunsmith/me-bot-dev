@@ -397,7 +397,6 @@ let adminCommandsCheck = (userID,userResponse) => {
 
   switch (userResponse) {
     
-
     //USED TO RUN A FOLLOW UP MESSAGE TEST TO SPECIFIC USERS
     case 'followupimagetestdino':
     followupTestID = 1768664439867579;
@@ -499,6 +498,21 @@ let adminCommandsCheck = (userID,userResponse) => {
           }
         }, 60000);
       });
+      return;
+      break;
+
+      case 'usercheck1':
+      var cutoff = new Date(2018,11,4);
+      db.sendQuery(userID, "SELECT * FROM guildmembers WHERE can_send_plus_one = 1", (res) => {
+        let canFollowUp = res.filter(dbuser => dbuser.phase == 3);
+        let dateFollowUp = canFollowUp.filter(phaseuser => ((new Date(phaseuser.last_active_time)) < cutoff));
+        console.log('follow up count:',dateFollowUp.length);
+          if (dateFollowUp.length > 0) {
+            dateFollowUp.forEach((val)=>{
+              console.log('user:', val);
+            });
+          }
+        });
       return;
       break;
 
@@ -959,8 +973,8 @@ let botHandler = (ID, data, answerPending) => {
           user[ID].status = 'i3_scene1';
           user[ID].currentPhase = phase3;
           botHandler(ID, {}, false);
-        }, 45*1000);
-        // }, 3*60*60*1000);
+        // }, 45*1000);
+        }, 3*60*60*1000);
       }
 
 
@@ -1241,7 +1255,7 @@ let lambdaHandler = (event, callback) => {
 
                   user[userID].status = ((typeof userCheck.status !== 'undefined') && userCheck.status !== 'endInteraction1') ? userCheck.status : 'i3_scene1_followup';
                   user[userID].currentPhase = (parseInt(userCheck.phase) == 3) ? phase3 : phase2;
-                  console.log('user session lost',user[userID].currentPhase)
+                  console.log('user session lost',user[userID].status);
 
                   // user[userID].status = userCheck.status;
                   // user[userID].currentPhase = (parseInt(userCheck.phase) == 1) ? phase1 : (parseInt(userCheck.phase) == 2) ? phase2 : phase3;
