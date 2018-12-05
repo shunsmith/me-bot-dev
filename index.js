@@ -66,7 +66,7 @@ var userID = null,
   quizFlag = false,
   msgObj = null,
   hintTimer = null,
-  yesResponses = ['👍', '👍🏻', '👍🏼', '👍🏽', '👍🏾', '👍🏿', 'sure', 'yea', 'yeah', 'why not', 'okay', 'okey doke', 'yes im doing good', 'yes definitely', 'yes i do', 'yes makes sense', 'yes i would', 'yes 100%', 'affirmative', 'fine', 'good', 'great', 'okay', 'ok', 'true', 'yea', 'yeah', 'all right', 'allright', 'alright', 'aye', 'beyond a doubt', 'certainly', 'definitely', 'exactly', 'good enough', 'gladly', 'granted', 'indubitably', 'just so', 'most assuredly', 'naturally', 'of course', 'positively', 'precisely', 'sure', 'sure thing', 'surely', 'understand', 'understood', 'undoubtedly', 'unquestionably', 'very well', 'willingly', 'without fail', 'yep', 'yes', 'i guess', 'i suppose', 'makes sense', 'cool', 'seems legit', 'meh', 'sweet', 'got it', 'i do', 'i can', 'i think so', 'y', 'i am', 'you bet', 'sounds fair', 'correct','Y','maybe', 'not sure', 'probably', 'possibly', 'i don’t know'],
+  yesResponses = ['👍', '👍🏻', '👍🏼', '👍🏽', '👍🏾', '👍🏿', 'sure', 'yea', 'yeah', 'why not', 'okay', 'okey doke', 'yes im doing good', 'yes definitely', 'yes i do', 'yes makes sense', 'yes i would', 'yes 100%', 'affirmative', 'fine', 'good', 'great', 'okay', 'ok', 'true', 'yea', 'yeah', 'all right', 'allright', 'alright', 'aye', 'beyond a doubt', 'certainly', 'definitely', 'exactly', 'good enough', 'gladly', 'granted', 'indubitably', 'just so', 'most assuredly', 'naturally', 'of course', 'positively', 'precisely', 'sure', 'sure thing', 'surely', 'understand', 'understood', 'undoubtedly', 'unquestionably', 'very well', 'willingly', 'without fail', 'yep', 'yes', 'i guess', 'i suppose', 'makes sense', 'cool', 'seems legit', 'meh', 'sweet', 'got it', 'i do', 'i can', 'i think so', 'y', 'i am', 'you bet', 'sounds fair', 'correct','Y','maybe', 'not sure', 'probably', 'possibly', 'i don’t know', 'i did', 'it is'],
   noResponses = ['👎', '👎🏻', '👎🏼', '👎🏽', '👎🏾', '👎🏿', 'nah', 'uh uh', 'dont think so', 'no this is the worst', 'no i want to stay', 'no i dont', 'no clue', 'no thanks', 'no', 'nope', 'nada', 'declined', 'not at all', 'negative', 'n','N', 'guess not'];
 
 let setProfileInfo = (ID, obj) => {
@@ -1160,7 +1160,7 @@ let botHandler = (ID, data, answerPending) => {
 
       case 'i4_scene4':
         showTyping(ID, 3000, function () {
-          sendTextMessage(ID, phase4.paths[user[ID].status].intro, () => {
+          sendTextMessage(ID, phase4.paths[user[ID].status].intro.replace('(Username)', user[ID].userProfile.first_name), () => {
             showTyping(ID, 1500, function () {
               sendTextMessage(ID, phase4.paths[user[ID].status].intro2, () => {
                 changeStatus(ID);
