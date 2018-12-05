@@ -506,12 +506,14 @@ let adminCommandsCheck = (userID,userResponse) => {
       db.sendQuery(userID, "SELECT * FROM guildmembers WHERE can_send_plus_one = 1", (res) => {
         let canFollowUp = res.filter(dbuser => dbuser.phase == 3);
         let dateFollowUp = canFollowUp.filter(phaseuser => ((new Date(phaseuser.last_active_time)) < cutoff));
-        console.log('follow up count:',dateFollowUp.length);
+        sendTextMessage(userID, `follow up count: ${dateFollowUp.length}`,()=>{
           if (dateFollowUp.length > 0) {
             dateFollowUp.forEach((val)=>{
               console.log('user:', val);
             });
           }
+        });
+
         });
       return;
       break;
