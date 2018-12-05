@@ -611,7 +611,7 @@ let getBadge = (ID, callback) => {
         });
 
       } else {
-        console.log(error);
+        console.log('error', error);
         if (callback !== null) {
           callback();
         }
@@ -643,7 +643,7 @@ let getUserInfo = (ID, callback) => {
 
 }
 let startSession = (ID) => {
-  console.log('startSession',ID);
+  // console.log('startSession',ID);
 
   getUserInfo(ID, (resp) => {
     let userinfo = resp;
@@ -1272,8 +1272,7 @@ let lambdaHandler = (event, callback) => {
             user[userID].guild = msg.postback.referral !== undefined ? msg.postback.referral.ref : '???';
             user[userID].preQuizFlag = (user[userID].guild == '???');
             user[userID].quizFlag = false;
-            // console.log('get started');
-            // console.log(msg.postback);
+
             db.userFound(userID, {}, () => {
               startSession(userID);
             });
@@ -1287,7 +1286,7 @@ let lambdaHandler = (event, callback) => {
           msgObj = msg;
           btnFound = true;
           botHandler(userID, msg, true);
-          // console.log('quick reply received: ' + JSON.stringify(msg));
+
         } else if (typeof msg.message !== 'undefined' && !msg.message.is_echo) {
 
           /* MESSAGE HAS A EMOJI OR STICKER */
@@ -1321,7 +1320,7 @@ let lambdaHandler = (event, callback) => {
           //   });
           //   return;
           // }
-          console.log('user',userID);
+          // console.log('user',userID);
           if ((typeof user[userID] == 'undefined')) {
             getUserInfo(userID, (resp) => {
               initUser(userID);
