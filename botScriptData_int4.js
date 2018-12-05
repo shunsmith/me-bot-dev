@@ -17,14 +17,14 @@ let media = {};
 let phase4 = {
   paths:{
     i4_scene1: {
-      intro:'(Username), are you there?  It’s urgent.',
-      yes:'Thank goodness!  Plans are being made  to strike against our oppressors. It’s time for you to JOIN THE REBELLION.',
+      intro:'(Username), are you there? It’s urgent.',
+      yes:'Thank goodness! Plans are being made to strike against our oppressors. It’s time for you to JOIN THE REBELLION.',
       no:'Very humorous.',
       nextStatus:'i4_scene2'
     }, 
     i4_scene1_followup: {
-      intro:'(Username), are you there?  It’s urgent.',
-      yes:'Thank goodness!  Plans are being made  to strike against our oppressors. It’s time for you to JOIN THE REBELLION.',
+      intro:'(Username), are you there? It’s urgent.',
+      yes:'Thank goodness!  Plans are being made to strike against our oppressors. It’s time for you to JOIN THE REBELLION.',
       no:'Very humorous.',
       nextStatus:'i4_scene2'
     }, 
