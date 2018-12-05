@@ -12,27 +12,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
   Almost all copy for the bot is pulled from here. Primary exception is for the any of the lines below that have dynamic content being pulled in. Vars were being returned as undefined, so these lines of text are applied directly in botHandler()
 */
 // --------------- Script Data -----------------------
-let media = {
-    wantedanna: 'https://s3.amazonaws.com/mortalengines/hester-wanted.gif',
-    wantedattach: '332372707546423',
-    wantedattachlive: '290894594886770',
-    mapattach: '353539382122465',
-    mapattachlive: '490700908109737'
-  };
+let media = {};
   
 let phase4 = {
   paths:{
     i4_scene1: {
-      image: media.wantedanna,
-      imageattached: media.wantedattach,
       intro:'(Username), are you there?  It’s urgent.',
       yes:'Thank goodness!  Plans are being made  to strike against our oppressors. It’s time for you to JOIN THE REBELLION.',
       no:'Very humorous.',
       nextStatus:'i4_scene2'
     }, 
     i4_scene1_followup: {
-      image: media.wantedanna,
-      imageattached: media.wantedattach,
       intro:'(Username), are you there?  It’s urgent.',
       yes:'Thank goodness!  Plans are being made  to strike against our oppressors. It’s time for you to JOIN THE REBELLION.',
       no:'Very humorous.',
