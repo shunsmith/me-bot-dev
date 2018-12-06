@@ -597,6 +597,7 @@ let getBadge = (ID, callback) => {
 
         console.log(`body: ${body}`);
         console.log(`response: ${response}`);
+        console.log(response);
         let rtnData = JSON.parse(body);
         console.log('image returned', rtnData.image);
 
