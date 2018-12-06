@@ -583,8 +583,8 @@ let getBadge = (ID, callback) => {
   data.img = imgurl;
 
 
-  let cmURL = 'https://www.mortalengines.com/badgemaker/index.php';
-  // let cmURL = 'http://universal.projectc.net/badgemaker/index.php';
+  // let cmURL = 'https://www.mortalengines.com/badgemaker/index.php';
+  let cmURL = 'http://universal.projectc.net/badgemaker/index.php';
   let body = JSON.stringify(data);
   request2.post(
     cmURL, {
@@ -603,13 +603,13 @@ let getBadge = (ID, callback) => {
 
         showTyping(ID, 4000, function () {
           sendImage(ID, rtnData.image, () => {
-            updateUserInfo(ID, {
-              badgeid: rtnData.badgeid
-            }, () => {
-              if (callback !== null) {
-                callback();
-              }
-            });
+            // updateUserInfo(ID, {
+            //   badgeid: rtnData.badgeid
+            // }, () => {
+            if (callback !== null) {
+              callback();
+            }
+            // });
           });
         });
 
