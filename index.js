@@ -1305,8 +1305,9 @@ let lambdaHandler = (event, callback) => {
               //   msg.message.text = 'yes';
               //   botHandler(userID, msg, true);
             } else {
-              showEmojiResponse(userID);
-
+              msg.message = 'okay';
+              botHandler(userID, msg, true);
+              // showEmojiResponse(userID);
             }
             return;
           }
