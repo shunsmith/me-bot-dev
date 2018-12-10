@@ -505,6 +505,33 @@ let adminCommandsCheck = (userID,userResponse) => {
       return;
       break;
 
+    case 'followupphase4':
+      db.sendQuery(userID, "SELECT * FROM guildmembers WHERE can_send_plus_one = 1", (res) => {
+        let canFollowUp = res.filter(dbuser => dbuser.phase == 4);
+        followupInt = setInterval(() => {
+          if (canFollowUp.length > 0) {
+            let fUpUser = canFollowUp.pop();
+            let obj = {
+              can_send_plus_one: 0,
+              phase: 5,
+              status: 'i4_scene1_followup'
+            };
+            updateUserInfo(fUpUser.fbid, obj, () => {
+              sendSavedImage(fUpUser.fbid, phase3.paths.i3_scene1_followup.imageattached, () => {
+                /* */
+                console.log('user sent message:', fUpUser);
+              });
+            });
+
+          } else {
+            console.log('users follow up complete');
+            clearInterval(followupInt);
+          }
+        }, 60000);
+      });
+      return;
+      break;
+
       case 'usercheck1':
       var cutoff = new Date(2018,11,4);
       db.sendQuery(userID, "SELECT * FROM guildmembers WHERE can_send_plus_one = 1", (res) => {
@@ -583,8 +610,8 @@ let getBadge = (ID, callback) => {
   data.img = imgurl;
 
 
-  // let cmURL = 'https://www.mortalengines.com/badgemaker/index.php';
-  let cmURL = 'http://universal.projectc.net/badgemaker/index.php';
+  let cmURL = 'https://www.mortalengines.com/badgemaker/index.php';
+  // let cmURL = 'http://universal.projectc.net/badgemaker/index.php';
   let body = JSON.stringify(data);
   request2.post(
     cmURL, {
@@ -1349,15 +1376,10 @@ let lambdaHandler = (event, callback) => {
                   });
                 } else {
 
-                  user[userID].status = ((typeof userCheck.status !== 'undefined') && userCheck.status !== 'endInteraction1') ? userCheck.status : 'i3_scene1_followup';
-                  user[userID].currentPhase = (parseInt(userCheck.phase) == 3) ? phase3 : phase2;
+                  user[userID].status = ((typeof userCheck.status !== 'undefined') && userCheck.status !== 'endInteraction1' && userCheck.status !== 'endInteraction2') ? userCheck.status : 'i4_scene1_followup';
+                  user[userID].currentPhase = (parseInt(userCheck.phase) == 4) ? phase4 : (parseInt(userCheck.phase) == 3) ? phase3 : phase2;
                   console.log('user session lost',user[userID].status);
-
-                  // user[userID].status = userCheck.status;
-                  // user[userID].currentPhase = (parseInt(userCheck.phase) == 1) ? phase1 : (parseInt(userCheck.phase) == 2) ? phase2 : phase3;
-                  // sendTextMessage(userID, `I apologize for the unpredictability of this old tech. Maybe some day our Guild of Engineers will master it. But, not today.`,()=>{
-                    botHandler(userID, msg, true);
-                  // });
+                  botHandler(userID, msg, true);
                 }
               });
             });
