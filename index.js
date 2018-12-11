@@ -1250,6 +1250,7 @@ let botHandler = (ID, data, answerPending) => {
         });
       }, 45*1000);
       // }, 3*60*60*1000);
+    }
     break;
 
     case 'NoResponse':
