@@ -300,6 +300,36 @@ let sendButtonMessage = (ID, str, btnOptions, callback) => {
   });
 };
 /**
+ * Send user a message with buttons as response options
+ * @param  {} str String of message/question sent to user
+ * @param  {} btnOptions Structure below. title = label, url = returned value from user response
+  [
+    { title: 'Click Here', url: 'https://tickets.mortalengines.com/'}
+  ]
+ * @param  {} callback optional callback function
+ */
+let sendURLButtonMessage = (ID, str, btnOptions, callback) => {
+  callback = typeof callback !== 'undefined' ? callback : null;
+  var btnArray = [];
+  for (var i = 0; i < btnOptions.length; i++) {
+    btnArray.push({
+      type: 'web_url',
+      content_type: 'web_url',
+      title: btnOptions[i].title,
+      url: btnOptions[i].url,
+      webview_height_ratio: 'full'
+    });
+  }
+  messenger.sendQuickRepliesMessage(ID, str, btnArray, function (err, evt) {
+    if (err) return console.log(err);
+    try {
+      callback();
+    } catch (e) {
+      /* */
+    }
+  });
+};
+/**
  * Default message sent if reponse isn't matched
  * 
  */
@@ -1240,14 +1270,12 @@ let botHandler = (ID, data, answerPending) => {
       // ENABLE FOR LINEAR
       setTimeout(() => {
         showTyping(ID, 3000, function () {
-          sendTextMessage(ID, phase4.paths[user[ID].status].intro, () => {
-            // showTyping(ID, 1500, function () {
-              // sendTextMessage(ID, phase4.paths[user[ID].status].intro2, () => {
-                // changeStatus(ID);
-              // });
-            // });
+          // sendTextMessage(ID, phase4.paths[user[ID].status].intro, () => {
+            sendURLButtonMessage(ID, phase4.paths[user[ID].status].intro, [{title:phase4.paths[user[ID].status].button,url:phase4.paths[user[ID].status].url}], ()=>{
+              /* */
+            });
           });
-        });
+          // });
       }, 45*1000);
       // }, 3*60*60*1000);
     }

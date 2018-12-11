@@ -50,8 +50,10 @@ let phase4 = {
       nextStatus:'endInteraction3'
     },
     endInteraction3: {
-      intro:'The Rebellion has begun. It’s time to fight for the future. Join us! https://tickets.mortalengines.com/',
-      nextStatus:'endInteraction3'
+      intro:'The Rebellion has begun. It’s time to fight for the future.',
+      button:'Join Us!',
+      url:'https://tickets.mortalengines.com/',
+      nextStatus:'NoResponse'
     }
   }
   };
