@@ -319,14 +319,28 @@ let sendURLButtonMessage = (ID, str, btnOptions, callback) => {
       webview_height_ratio: 'full'
     });
   }
-  messenger.sendQuickRepliesMessage(ID, str, btnArray, function (err, evt) {
+
+  var messageData = {
+    'attachment': {
+      'type': 'video',
+      'payload': {
+        'template_type': 'button',
+        'text': str,
+        'buttons':btnArray
+      }
+    }
+  };
+
+  messenger.sendMessage(ID, messageData, function (err, evt) {
     if (err) return console.log(err);
     try {
       callback();
     } catch (e) {
+      console.log(e);
       /* */
     }
   });
+
 };
 /**
  * Default message sent if reponse isn't matched
