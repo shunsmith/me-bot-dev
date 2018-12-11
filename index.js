@@ -322,7 +322,7 @@ let sendURLButtonMessage = (ID, str, btnOptions, callback) => {
 
   var messageData = {
     'attachment': {
-      'type': 'video',
+      'type': 'template',
       'payload': {
         'template_type': 'button',
         'text': str,
