@@ -46,8 +46,11 @@ let phase4 = {
       nextStatus:'i4_scene4'
     },
     i4_scene4: {
-      intro:'Remember, (Username),  we have the power to stop the traction beast once and for all.',
-      intro2:'Cheers, Antonia.',
+      intro:'We’ll be in touch.',
+      nextStatus:'endInteraction3'
+    },
+    final_followup: {
+      intro:'The Rebellion has begun. It’s time to fight for the future. Join us! https://tickets.mortalengines.com/',
       nextStatus:'endInteraction3'
     }
   }

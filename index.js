@@ -1219,7 +1219,7 @@ let botHandler = (ID, data, answerPending) => {
 
     case 'endInteraction2':
     if (!answerPending) {
-      dbData.can_send_plus_one = 1;
+      dbData.can_send_plus_one = 0;
       dbData.phase = 4;
 
       // ENABLE FOR LINEAR
@@ -1233,9 +1233,23 @@ let botHandler = (ID, data, answerPending) => {
     break;
 
     case 'endInteraction3':
-    dbData.can_send_plus_one = 1;
-    dbData.phase = 5;
-
+    if (!answerPending) {
+      dbData.can_send_plus_one = 1;
+      dbData.phase = 5;
+  
+      // ENABLE FOR LINEAR
+      setTimeout(() => {
+        showTyping(ID, 3000, function () {
+          sendTextMessage(ID, phase4.paths.final_followup.intro, () => {
+            // showTyping(ID, 1500, function () {
+              // sendTextMessage(ID, phase4.paths[user[ID].status].intro2, () => {
+                // changeStatus(ID);
+              // });
+            // });
+          });
+        });
+      }, 45*1000);
+      // }, 3*60*60*1000);
     break;
 
     case 'NoResponse':
