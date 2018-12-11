@@ -66,8 +66,8 @@ var userID = null,
   quizFlag = false,
   msgObj = null,
   hintTimer = null,
-  yesResponses = ['👍', '👍🏻', '👍🏼', '👍🏽', '👍🏾', '👍🏿', 'sure', 'yea', 'yeah', 'why not', 'okay', 'okey doke', 'yes im doing good', 'yes definitely', 'yes i do', 'yes makes sense', 'yes i would', 'yes 100%', 'affirmative', 'fine', 'good', 'great', 'okay', 'ok', 'true', 'yea', 'yeah', 'all right', 'allright', 'alright', 'aye', 'beyond a doubt', 'certainly', 'definitely', 'exactly', 'good enough', 'gladly', 'granted', 'indubitably', 'just so', 'most assuredly', 'naturally', 'of course', 'positively', 'precisely', 'sure', 'sure thing', 'surely', 'understand', 'understood', 'undoubtedly', 'unquestionably', 'very well', 'willingly', 'without fail', 'yep', 'yes', 'i guess', 'i suppose', 'makes sense', 'cool', 'seems legit', 'meh', 'sweet', 'got it', 'i do', 'i can', 'i think so', 'y', 'i am', 'you bet', 'sounds fair', 'correct','Y','maybe', 'not sure', 'probably', 'possibly', 'i don’t know', 'i did', 'it is'],
-  noResponses = ['👎', '👎🏻', '👎🏼', '👎🏽', '👎🏾', '👎🏿', 'nah', 'uh uh', 'dont think so', 'no this is the worst', 'no i want to stay', 'no i dont', 'no clue', 'no thanks', 'no', 'nope', 'nada', 'declined', 'not at all', 'negative', 'n','N', 'guess not'];
+  yesResponses = ['👍', '👍🏻', '👍🏼', '👍🏽', '👍🏾', '👍🏿', 'sure', 'yea', 'yeah', 'why not', 'okay', 'okey doke', 'yes im doing good', 'yes definitely', 'yes i do', 'yes makes sense', 'yes i would', 'yes 100%', 'affirmative', 'fine', 'good', 'great', 'okay', 'ok', 'true', 'yea', 'yeah', 'all right', 'allright', 'alright', 'aye', 'beyond a doubt', 'certainly', 'definitely', 'exactly', 'good enough', 'gladly', 'granted', 'indubitably', 'just so', 'most assuredly', 'naturally', 'of course', 'positively', 'precisely', 'sure', 'sure thing', 'surely', 'understand', 'understood', 'undoubtedly', 'unquestionably', 'very well', 'willingly', 'without fail', 'yep', 'yes', 'i guess', 'i suppose', 'makes sense', 'cool', 'seems legit', 'meh', 'sweet', 'got it', 'i do', 'i can', 'i think so', 'y', 'i am', 'you bet', 'sounds fair', 'correct', 'Y', 'maybe', 'not sure', 'probably', 'possibly', 'i don’t know', 'i did', 'it is'],
+  noResponses = ['👎', '👎🏻', '👎🏼', '👎🏽', '👎🏾', '👎🏿', 'nah', 'uh uh', 'dont think so', 'no this is the worst', 'no i want to stay', 'no i dont', 'no clue', 'no thanks', 'no', 'nope', 'nada', 'declined', 'not at all', 'negative', 'n', 'N', 'guess not'];
 
 let setProfileInfo = (ID, obj) => {
   user[ID].userProfile = obj;
@@ -313,7 +313,6 @@ let sendURLButtonMessage = (ID, str, btnOptions, callback) => {
   var btnArray = [];
   for (var i = 0; i < btnOptions.length; i++) {
     btnArray.push({
-      type: 'web_url',
       content_type: 'web_url',
       title: btnOptions[i].title,
       url: btnOptions[i].url,
@@ -403,7 +402,7 @@ let initUser = (ID) => {
 /* Project C Dev 1731193596992122 */
 /* Project C Live 883665018424119 */
 /* Dino 1768664439867579 */
-/* Morgan 1584507178328118 */ 
+/* Morgan 1584507178328118 */
 /* Matthew 1685460031507283 */
 /* Leigh 1760166547372521 */
 
@@ -420,40 +419,39 @@ let adminUsers = [
 ]
 let inTestGroup = (ID) => {
   let compID = parseInt(ID);
-  return adminUsers.indexOf(compID) > -1;
-  ;
+  return adminUsers.indexOf(compID) > -1;;
 }
 
 // The lambdaHandler function has a check for specific test users that can run the commands in this function
-let adminCommandsCheck = (userID,userResponse) => {
+let adminCommandsCheck = (userID, userResponse) => {
   let followupInt = null;
   let followupTestID = 1673627912714016;
 
   switch (userResponse) {
-    
+
     //USED TO RUN A FOLLOW UP MESSAGE TEST TO SPECIFIC USERS
     case 'followupimagetestdino':
-    followupTestID = 1768664439867579;
+      followupTestID = 1768664439867579;
     case 'followupimagetestmatthew':
-    followupTestID = 1685460031507283;
+      followupTestID = 1685460031507283;
     case 'followupimagetest':
-    db.sendQuery(userID, "SELECT * FROM guildmembers WHERE fbid = "+followupTestID, (res) => {
-      console.log('followupImageTest',followupTestID);
-      sendImage(followupTestID, 'https://s3.amazonaws.com/mortalengines/Test_gif.gif', () => {
-        sendTextMessage(followupTestID, `Greetings ${res.name}, this is follow up message. The Wingkong is Exchange is ready to dominate.`,()=>{
-          sendTextMessage(userID, `Hello, a message was sent to ${followupTestID}`);
+      db.sendQuery(userID, "SELECT * FROM guildmembers WHERE fbid = " + followupTestID, (res) => {
+        console.log('followupImageTest', followupTestID);
+        sendImage(followupTestID, 'https://s3.amazonaws.com/mortalengines/Test_gif.gif', () => {
+          sendTextMessage(followupTestID, `Greetings ${res.name}, this is follow up message. The Wingkong is Exchange is ready to dominate.`, () => {
+            sendTextMessage(userID, `Hello, a message was sent to ${followupTestID}`);
 
+          });
         });
-      }); 
-    });
+      });
       return;
       break;
 
     case 'testfollowupphase2':
       db.sendQuery(userID, "SELECT * FROM guildmembers WHERE can_send_plus_one = 1", (res) => {
-        let canFollowUp = res.filter(dbuser => ((dbuser.fbid == 1760166547372521) ||(dbuser.fbid == 1673627912714016)));
+        let canFollowUp = res.filter(dbuser => ((dbuser.fbid == 1760166547372521) || (dbuser.fbid == 1673627912714016)));
         // let canFollowUp = res.filter(dbuser => ((dbuser.fbid == 1685460031507283) ||(dbuser.fbid == 1768664439867579) || (dbuser.fbid == 1673627912714016)));
-        console.log('canFollowUp',canFollowUp);
+        console.log('canFollowUp', canFollowUp);
         followupInt = setInterval(() => {
           if (canFollowUp.length > 0) {
             let fUpUser = canFollowUp.pop();
@@ -562,20 +560,20 @@ let adminCommandsCheck = (userID,userResponse) => {
       return;
       break;
 
-      case 'usercheck1':
-      var cutoff = new Date(2018,11,4);
+    case 'usercheck1':
+      var cutoff = new Date(2018, 11, 4);
       db.sendQuery(userID, "SELECT * FROM guildmembers WHERE can_send_plus_one = 1", (res) => {
         let canFollowUp = res.filter(dbuser => dbuser.phase == 3);
         let dateFollowUp = canFollowUp.filter(phaseuser => ((new Date(phaseuser.last_active_time)) < cutoff));
-        sendTextMessage(userID, `follow up count: ${dateFollowUp.length}`,()=>{
+        sendTextMessage(userID, `follow up count: ${dateFollowUp.length}`, () => {
           if (dateFollowUp.length > 0) {
-            dateFollowUp.forEach((val)=>{
+            dateFollowUp.forEach((val) => {
               console.log('user:', val);
             });
           }
         });
 
-        });
+      });
       return;
       break;
 
@@ -853,21 +851,21 @@ let botHandler = (ID, data, answerPending) => {
     case 'i1_scene1':
       if (!answerPending) {
         // showTyping(ID, 3500, function () {
-          sendSavedImage(ID, phase2.paths[user[ID].status].imageattached, () => {
-            /* */
-          });
+        sendSavedImage(ID, phase2.paths[user[ID].status].imageattached, () => {
+          /* */
+        });
         // });
       } else {
         if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
-          var resp = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes :  phase2.paths[user[ID].status].no;
+          var resp = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes : phase2.paths[user[ID].status].no;
           showTyping(ID, 5000, function () {
             sendTextMessage(ID, resp, () => {
               // user[ID].status = phase2.paths[user[ID].status].quizStatus;
               // user[ID].quizFlag = true;
               // botHandler(ID, {}, false);
-              setTimeout(()=>{
+              setTimeout(() => {
                 changeStatus(ID);
-              },5000)
+              }, 5000)
             });
           });
 
@@ -881,21 +879,21 @@ let botHandler = (ID, data, answerPending) => {
     case 'i1_scene1_followup':
       if (!answerPending) {
         // showTyping(ID, 3500, function () {
-          sendSavedImage(ID, phase2.paths[user[ID].status].image, () => {
-            /* */
-          });
+        sendSavedImage(ID, phase2.paths[user[ID].status].image, () => {
+          /* */
+        });
         // });
       } else {
         if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
-          var resp = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes :  phase2.paths[user[ID].status].no;
+          var resp = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes : phase2.paths[user[ID].status].no;
           showTyping(ID, 5000, function () {
             sendTextMessage(ID, resp, () => {
               // user[ID].status = phase2.paths[user[ID].status].quizStatus;
               // user[ID].quizFlag = true;
               // botHandler(ID, {}, false);
-              setTimeout(()=>{
+              setTimeout(() => {
                 changeStatus(ID);
-              },5000)
+              }, 5000)
             });
           });
 
@@ -911,18 +909,18 @@ let botHandler = (ID, data, answerPending) => {
         showTyping(ID, 3000, function () {
           sendTextMessage(ID, phase2.paths[user[ID].status].intro, () => {
             // showTyping(ID, 4000, function () {
-              // sendTextMessage(ID, phase2.paths[user[ID].status].intro2, () => {
-                /* */
-              // });
+            // sendTextMessage(ID, phase2.paths[user[ID].status].intro2, () => {
+            /* */
+            // });
             // });
           });
         });
       } else {
         if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
-          var resp = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes :  phase2.paths[user[ID].status].no;
+          var resp = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes : phase2.paths[user[ID].status].no;
           showTyping(ID, 5000, function () {
             sendTextMessage(ID, resp, () => {
-                changeStatus(ID);
+              changeStatus(ID);
             });
           });
 
@@ -946,14 +944,14 @@ let botHandler = (ID, data, answerPending) => {
         });
       } else {
         if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
-          var resp = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes :  phase2.paths[user[ID].status].no;
+          var resp = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes : phase2.paths[user[ID].status].no;
           showTyping(ID, 4000, function () {
             sendTextMessage(ID, resp, () => {
               // user[ID].status = phase2.paths[user[ID].status].quizStatus;
               // user[ID].quizFlag = true;
               // botHandler(ID, {}, false);
               // setTimeout(()=>{
-                changeStatus(ID);
+              changeStatus(ID);
               // },5000)
             });
           });
@@ -978,18 +976,18 @@ let botHandler = (ID, data, answerPending) => {
         });
       } else {
         if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
-          
-          var resp = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes :  phase2.paths[user[ID].status].no;
-          var resp2 = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes2 :  phase2.paths[user[ID].status].no2;
+
+          var resp = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes : phase2.paths[user[ID].status].no;
+          var resp2 = (simpleYesNo(data) == 'yes') ? phase2.paths[user[ID].status].yes2 : phase2.paths[user[ID].status].no2;
           showTyping(ID, 5000, function () {
             sendTextMessage(ID, resp, () => {
               showTyping(ID, 250, function () {
                 // sendImage(ID, phase2.paths[user[ID].status].image, () => {
-                  sendSavedVideo(ID, phase2.paths[user[ID].status].video, () => {
+                sendSavedVideo(ID, phase2.paths[user[ID].status].video, () => {
                   showTyping(ID, 5000, function () {
                     sendTextMessage(ID, resp2, () => {
                       changeStatus(ID);
-                    });      
+                    });
                   });
                 });
               });
@@ -1024,12 +1022,12 @@ let botHandler = (ID, data, answerPending) => {
       }
       break;
 
-      case 'endInteraction1nonLinear':
+    case 'endInteraction1nonLinear':
       dbData.can_send_plus_one = 1;
 
       break;
 
-      case 'i3_scene1':
+    case 'i3_scene1':
       dbData.can_send_plus_one = 0;
       if (!answerPending) {
         showTyping(ID, 1500, function () {
@@ -1047,13 +1045,13 @@ let botHandler = (ID, data, answerPending) => {
       }
       break;
 
-      case 'i3_scene1_followup':
+    case 'i3_scene1_followup':
       dbData.can_send_plus_one = 0;
       if (!answerPending) {
         // showTyping(ID, 3500, function () {
-          sendSavedImage(ID, phase3.paths[user[ID].status].imageattached, () => {
-            /* */
-          });
+        sendSavedImage(ID, phase3.paths[user[ID].status].imageattached, () => {
+          /* */
+        });
         // });
       } else {
         if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
@@ -1067,9 +1065,9 @@ let botHandler = (ID, data, answerPending) => {
       break;
 
 
-      case 'i3_scene2':
-      case 'i3_scene3':
-      case 'i3_scene4':
+    case 'i3_scene2':
+    case 'i3_scene3':
+    case 'i3_scene4':
       if (!answerPending) {
         showTyping(ID, 1500, function () {
           var resp = (phase3.paths[user[ID].status].intro.indexOf('(Username)') > -1) ? phase3.paths[user[ID].status].intro.replace('(Username)', user[ID].userProfile.first_name) : phase3.paths[user[ID].status].intro;
@@ -1079,10 +1077,10 @@ let botHandler = (ID, data, answerPending) => {
         });
       } else {
         if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
-          var resp = (simpleYesNo(data) == 'yes') ? phase3.paths[user[ID].status].yes :  phase3.paths[user[ID].status].no;
+          var resp = (simpleYesNo(data) == 'yes') ? phase3.paths[user[ID].status].yes : phase3.paths[user[ID].status].no;
           showTyping(ID, 4000, function () {
             sendTextMessage(ID, resp, () => {
-                changeStatus(ID);
+              changeStatus(ID);
             });
           });
 
@@ -1093,7 +1091,7 @@ let botHandler = (ID, data, answerPending) => {
       }
       break;
 
-      case 'i3_scene5':
+    case 'i3_scene5':
       if (!answerPending) {
         showTyping(ID, 600, function () {
           sendSavedImage(ID, phase3.paths[user[ID].status].imageattached, () => {
@@ -1110,10 +1108,10 @@ let botHandler = (ID, data, answerPending) => {
         });
       } else {
         if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
-          var resp = (simpleYesNo(data) == 'yes') ? phase3.paths[user[ID].status].yes :  phase3.paths[user[ID].status].no;
+          var resp = (simpleYesNo(data) == 'yes') ? phase3.paths[user[ID].status].yes : phase3.paths[user[ID].status].no;
           showTyping(ID, 4000, function () {
             sendTextMessage(ID, resp, () => {
-                changeStatus(ID);
+              changeStatus(ID);
             });
           });
           resetAttempts(ID);
@@ -1123,18 +1121,18 @@ let botHandler = (ID, data, answerPending) => {
       }
       break;
 
-      case 'i3_scene6':
-        showTyping(ID, 600, function () {
-          sendTextMessage(ID, phase3.paths[user[ID].status].intro, () => {
-            changeStatus(ID);
-          });
+    case 'i3_scene6':
+      showTyping(ID, 600, function () {
+        sendTextMessage(ID, phase3.paths[user[ID].status].intro, () => {
+          changeStatus(ID);
         });
+      });
       break;
 
 
 
-      case 'i4_scene1':
-      case 'i4_scene1_followup':
+    case 'i4_scene1':
+    case 'i4_scene1_followup':
       dbData.can_send_plus_one = 0;
       if (!answerPending) {
         showTyping(ID, 1500, function () {
@@ -1145,10 +1143,10 @@ let botHandler = (ID, data, answerPending) => {
         });
       } else {
         if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
-          var resp = (simpleYesNo(data) == 'yes') ? phase4.paths[user[ID].status].yes :  phase4.paths[user[ID].status].no;
+          var resp = (simpleYesNo(data) == 'yes') ? phase4.paths[user[ID].status].yes : phase4.paths[user[ID].status].no;
           showTyping(ID, 4000, function () {
             sendTextMessage(ID, resp, () => {
-                changeStatus(ID);
+              changeStatus(ID);
             });
           });
 
@@ -1159,7 +1157,7 @@ let botHandler = (ID, data, answerPending) => {
       }
       break;
 
-      case 'i4_scene2':
+    case 'i4_scene2':
       if (!answerPending) {
         showTyping(ID, 1000, function () {
           var resp = (phase4.paths[user[ID].status].intro.indexOf('(Username)') > -1) ? phase4.paths[user[ID].status].intro.replace('(Username)', user[ID].userProfile.first_name) : phase4.paths[user[ID].status].intro;
@@ -1169,10 +1167,10 @@ let botHandler = (ID, data, answerPending) => {
         });
       } else {
         if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
-          var resp = (simpleYesNo(data) == 'yes') ? phase4.paths[user[ID].status].yes :  phase4.paths[user[ID].status].no;
+          var resp = (simpleYesNo(data) == 'yes') ? phase4.paths[user[ID].status].yes : phase4.paths[user[ID].status].no;
           showTyping(ID, 4000, function () {
             sendTextMessage(ID, resp.replace('(Username)', user[ID].userProfile.first_name), () => {
-              getBadge(ID,()=>{
+              getBadge(ID, () => {
                 changeStatus(ID);
               });
             });
@@ -1186,109 +1184,107 @@ let botHandler = (ID, data, answerPending) => {
       break;
 
 
-      case 'i4_scene3':
+    case 'i4_scene3':
       if (!answerPending) {
-            showTyping(ID, 3000, function () {
-              sendTextMessage(ID, phase4.paths[user[ID].status].intro, () => {
-                showTyping(ID, 4000, function () {
-                  sendTextMessage(ID, phase4.paths[user[ID].status].intro2, () => {
-                    // changeStatus(ID);
-                  });
-                });
-              });
-            });
-
-          } else {
-        if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
-          var resp = (simpleYesNo(data) == 'yes') ? phase4.paths[user[ID].status].yes :  phase4.paths[user[ID].status].no;
-          var resp2 = (simpleYesNo(data) == 'yes') ? phase4.paths[user[ID].status].yes2 :  phase4.paths[user[ID].status].no2;
-          showTyping(ID, 1500, function () {
-            sendTextMessage(ID, resp, () => {
-              showTyping(ID, 2500, function () {
-                sendTextMessage(ID, resp2, () => {
-                    changeStatus(ID);
-                });
-              });
-            });
-          });
-          resetAttempts(ID);
-        } else {
-          sendRejectionMessage(ID, true);
-        }
-      }
-      break;
-
-      case 'i4_scene4':
         showTyping(ID, 3000, function () {
           sendTextMessage(ID, phase4.paths[user[ID].status].intro, () => {
-            showTyping(ID, 1500, function () {
+            showTyping(ID, 4000, function () {
               sendTextMessage(ID, phase4.paths[user[ID].status].intro2, () => {
-                changeStatus(ID);
+                // changeStatus(ID);
               });
             });
           });
         });
+
+      } else {
+        if ((simpleYesNo(data) == 'yes') || (simpleYesNo(data) == 'no')) {
+          var resp = (simpleYesNo(data) == 'yes') ? phase4.paths[user[ID].status].yes : phase4.paths[user[ID].status].no;
+          var resp2 = (simpleYesNo(data) == 'yes') ? phase4.paths[user[ID].status].yes2 : phase4.paths[user[ID].status].no2;
+          showTyping(ID, 1500, function () {
+            sendTextMessage(ID, resp, () => {
+              showTyping(ID, 2500, function () {
+                sendTextMessage(ID, resp2, () => {
+                  changeStatus(ID);
+                });
+              });
+            });
+          });
+          resetAttempts(ID);
+        } else {
+          sendRejectionMessage(ID, true);
+        }
+      }
+      break;
+
+    case 'i4_scene4':
+      showTyping(ID, 3000, function () {
+        sendTextMessage(ID, phase4.paths[user[ID].status].intro, () => {
+          // showTyping(ID, 1500, function () {
+            // sendTextMessage(ID, phase4.paths[user[ID].status].intro2, () => {
+              changeStatus(ID);
+            // });
+          // });
+        });
+      });
       break;
 
 
-      case 'endInteraction1':
+    case 'endInteraction1':
       if (!answerPending) {
         dbData.can_send_plus_one = 1;
         dbData.phase = 3;
-  
+
         // ENABLE FOR LINEAR
         setTimeout(() => {
           user[ID].status = 'i3_scene1';
           user[ID].currentPhase = phase3;
           botHandler(ID, {}, false);
-        }, 45*1000);
+        }, 45 * 1000);
         // }, 3*60*60*1000);
       }
       break;
 
 
     case 'endInteraction2':
-    if (!answerPending) {
-      dbData.can_send_plus_one = 0;
-      dbData.phase = 4;
+      if (!answerPending) {
+        dbData.can_send_plus_one = 0;
+        dbData.phase = 4;
 
-      // ENABLE FOR LINEAR
-      setTimeout(() => {
-        user[ID].status = 'i4_scene1';
-        user[ID].currentPhase = phase4;
-        botHandler(ID, {}, false);
-      }, 45*1000);
-      // }, 3*60*60*1000);
-    }
-    break;
+        // ENABLE FOR LINEAR
+        setTimeout(() => {
+          user[ID].status = 'i4_scene1';
+          user[ID].currentPhase = phase4;
+          botHandler(ID, {}, false);
+        }, 45 * 1000);
+        // }, 3*60*60*1000);
+      }
+      break;
 
     case 'endInteraction3':
-    console.log('endInteraction3 reached');
-    if (!answerPending) {
+      console.log('endInteraction3 reached');
+      if (!answerPending) {
 
-      console.log(phase4.paths[user[ID].status]);
-      dbData.can_send_plus_one = 1;
-      dbData.phase = 5;
-  
-      // ENABLE FOR LINEAR
-      setTimeout(() => {
-        showTyping(ID, 3000, function () {
-          var btnData = [
-            {
+        console.log(phase4.paths[user[ID].status]);
+        dbData.can_send_plus_one = 1;
+        dbData.phase = 5;
+
+        // ENABLE FOR LINEAR
+        setTimeout(() => {
+          showTyping(ID, 3000, function () {
+            var btnData = [{
               title: phase4.paths[user[ID].status].button,
               url: phase4.paths[user[ID].status].url
-            }
-          ];
-          // sendTextMessage(ID, phase4.paths[user[ID].status].intro, () => {
-            sendURLButtonMessage(ID, phase4.paths[user[ID].status].intro, btnData, ()=>{
+            }];
+            // sendTextMessage(ID, phase4.paths[user[ID].status].intro, () => {
+            sendURLButtonMessage(ID, phase4.paths[user[ID].status].intro, btnData, () => {
               /* */
             });
           });
           // });
-      }, 45*1000);
-      // }, 3*60*60*1000);
-    }
-    break;
+        }, 45 * 1000);
+        // }, 3*60*60*1000);
+      }
+      break;
 
     case 'NoResponse':
       /* */
@@ -1423,14 +1419,14 @@ let lambdaHandler = (event, callback) => {
                     console.log('user added to db getting second interaction');
                     console.log(resp);
                     user[userID].status = 'i1_scene1';
-                    user[userID].currentPhase = phase2;  
+                    user[userID].currentPhase = phase2;
                     botHandler(userID, msg, true);
                   });
                 } else {
 
                   user[userID].status = ((typeof userCheck.status !== 'undefined') && userCheck.status !== 'endInteraction1' && userCheck.status !== 'endInteraction2') ? userCheck.status : 'i4_scene1_followup';
                   user[userID].currentPhase = (parseInt(userCheck.phase) == 4) ? phase4 : (parseInt(userCheck.phase) == 3) ? phase3 : phase2;
-                  console.log('user session lost',user[userID].status);
+                  console.log('user session lost', user[userID].status);
                   botHandler(userID, msg, true);
                 }
               });
@@ -1440,7 +1436,7 @@ let lambdaHandler = (event, callback) => {
 
           /* ADMIN COMMANDS */
           if (inTestGroup(userID)) {
-            adminCommandsCheck(userID,msg.message.text.toLowerCase());
+            adminCommandsCheck(userID, msg.message.text.toLowerCase());
           }
           /* *************** */
 
