@@ -1263,7 +1263,10 @@ let botHandler = (ID, data, answerPending) => {
     break;
 
     case 'endInteraction3':
+    console.log('endInteraction3 reached');
     if (!answerPending) {
+
+      console.log(phase4.paths[user[ID].status]);
       dbData.can_send_plus_one = 1;
       dbData.phase = 5;
   
