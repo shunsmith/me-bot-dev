@@ -1273,8 +1273,14 @@ let botHandler = (ID, data, answerPending) => {
       // ENABLE FOR LINEAR
       setTimeout(() => {
         showTyping(ID, 3000, function () {
+          var btnData = [
+            {
+              title: phase4.paths[user[ID].status].button,
+              url: phase4.paths[user[ID].status].url
+            }
+          ];
           // sendTextMessage(ID, phase4.paths[user[ID].status].intro, () => {
-            sendURLButtonMessage(ID, phase4.paths[user[ID].status].intro, [{title:phase4.paths[user[ID].status].button,url:phase4.paths[user[ID].status].url}], ()=>{
+            sendURLButtonMessage(ID, phase4.paths[user[ID].status].intro, btnData, ()=>{
               /* */
             });
           });
