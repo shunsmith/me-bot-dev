@@ -1190,7 +1190,7 @@ let botHandler = (ID, data, answerPending) => {
 
       case 'i4_scene4':
         showTyping(ID, 3000, function () {
-          sendTextMessage(ID, phase4.paths[user[ID].status].intro.replace('(Username)', user[ID].userProfile.first_name), () => {
+          sendTextMessage(ID, phase4.paths[user[ID].status].intro, () => {
             showTyping(ID, 1500, function () {
               sendTextMessage(ID, phase4.paths[user[ID].status].intro2, () => {
                 changeStatus(ID);
@@ -1240,7 +1240,7 @@ let botHandler = (ID, data, answerPending) => {
       // ENABLE FOR LINEAR
       setTimeout(() => {
         showTyping(ID, 3000, function () {
-          sendTextMessage(ID, phase4.paths['final_followup'].intro, () => {
+          sendTextMessage(ID, phase4.paths[user[ID].status].intro, () => {
             // showTyping(ID, 1500, function () {
               // sendTextMessage(ID, phase4.paths[user[ID].status].intro2, () => {
                 // changeStatus(ID);

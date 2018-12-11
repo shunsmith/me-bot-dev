@@ -49,7 +49,7 @@ let phase4 = {
       intro:'We’ll be in touch.',
       nextStatus:'endInteraction3'
     },
-    final_followup: {
+    endInteraction3: {
       intro:'The Rebellion has begun. It’s time to fight for the future. Join us! https://tickets.mortalengines.com/',
       nextStatus:'endInteraction3'
     }
